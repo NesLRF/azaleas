@@ -66,7 +66,7 @@ class PaymentsController extends Controller
             Log::info($request);
             Log::info("Id seleccionado: " .$request["id_selected"]);
 
-            $condomino = Direcciones::where('user_id', $request["id_selected"])->with('usuario')->get();
+            $condomino = Direcciones::where('user_id', $request["id_selected"])->get();
 
             $user = User::find($request["id_selected"]);
 

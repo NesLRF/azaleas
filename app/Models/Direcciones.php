@@ -15,7 +15,7 @@ class Direcciones extends Model
 
     public function usuario()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class);
     }
 
 }

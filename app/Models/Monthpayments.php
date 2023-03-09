@@ -5,16 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Condomino extends Model
+class Monthpayments extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'condomino', 'user_id', 'candados',
-    ];
+    public $table = 'monthpayments';
 
-    protected $cast = [
-        'data' => 'array',
+    protected $fillable = [
+        'user_id', 'capture_month', 'capture_year', 'paid'
     ];
 
     public function usuarios()

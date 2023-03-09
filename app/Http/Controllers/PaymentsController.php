@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Imports\UsersImport;
+use App\Models\Condomino;
 use App\Models\Direcciones;
+use App\Models\Monthpayments;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -62,20 +65,21 @@ class PaymentsController extends Controller
     public function payment_create(Request $request)
     {
         if(Auth::user()->can('condomino_create')){
-            Log::info("All request");
-            Log::info($request);
-            Log::info("Id seleccionado: " .$request["id_selected"]);
+            $month_selected = '01-'.$request["month_selected"];
+            $month_selected_ff = (new Carbon($month_selected))->format('Y-m-d H:i:s');
+            $capture_month = (new Carbon($month_selected_ff))->format('m');
+            $capture_year = (new Carbon($month_selected_ff))->format('Y');
+            $payment = $request["amount_paid"];
+            $condomino = Direcciones::with('usuario')->where('user_id', $request["id_selected"])->first();
 
-            $condomino = Direcciones::where('user_id', $request["id_selected"])->get();
+            $payment = Monthpayments::create([
+                "user_id" => $condomino->usuario->id,
+                "capture_month" => $capture_month,
+                "capture_year" => $capture_year,
+                "paid" => $payment
+            ]);
 
-            $user = User::find($request["id_selected"]);
-
-            Log::info("Datos");
-            Log::info($condomino);
-            Log::info("User");
-            Log::info($user);
-
-            return back()->withStatus('Registro exitoso');
+            return back()->with('message', 'Pago registrado exitosamente');
         }else{
             return view('errors.error400');
         }

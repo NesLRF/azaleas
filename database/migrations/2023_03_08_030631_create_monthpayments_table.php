@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVecinosTable extends Migration
+class CreateMonthpaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateVecinosTable extends Migration
      */
     public function up()
     {
-        Schema::create('vecinos', function (Blueprint $table) {
+        Schema::create('monthpayments', function (Blueprint $table) {
             $table->id();
-            $table->string('condomino');
-            $table->json('data')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->integer('capture_month');
             $table->integer('capture_year');
+            $table->integer('paid');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ class CreateVecinosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vecinos');
+        Schema::dropIfExists('monthpayments');
     }
 }

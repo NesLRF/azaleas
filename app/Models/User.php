@@ -40,9 +40,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function condominos()
+    public function month_payments()
     {
-        return $this->hasMany(Condomino::class);
+        return $this->hasMany(Monthpayments::class);
     }
     
     public function direccion()

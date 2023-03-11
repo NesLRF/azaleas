@@ -33,7 +33,6 @@ class PaymentsController extends Controller
 
     public function user_import(Request $request)
     {
-        Log::info("Import");
         if($request->hasFile('document')){
             $path = $request->file('document');
             Excel::import(new UsersImport, $path);

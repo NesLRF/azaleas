@@ -10,7 +10,7 @@
             <div class="col-md-4"></div>
             <div class="col-md-6">
                 <div class="row">
-                    <form action="{{route('user_i')}}" method="POST">
+                    <form action="{{route('user_i')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="col-md-6">
                             <input type="file" name="document">

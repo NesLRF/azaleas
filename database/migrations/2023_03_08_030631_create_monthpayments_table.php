@@ -15,11 +15,11 @@ class CreateMonthpaymentsTable extends Migration
     {
         Schema::create('monthpayments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('direccion_id');
             $table->integer('capture_month');
             $table->integer('capture_year');
             $table->integer('paid');
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('direccion_id')->references('id')->on('direcciones')->cascadeOnDelete();
             $table->timestamps();
         });
     }

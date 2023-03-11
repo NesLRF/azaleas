@@ -65,21 +65,38 @@ class PaymentsController extends Controller
     public function payment_create(Request $request)
     {
         if(Auth::user()->can('condomino_create')){
+            Log::info($request);
             $month_selected = '01-'.$request["month_selected"];
             $month_selected_ff = (new Carbon($month_selected))->format('Y-m-d H:i:s');
             $capture_month = (new Carbon($month_selected_ff))->format('m');
             $capture_year = (new Carbon($month_selected_ff))->format('Y');
             $payment = $request["amount_paid"];
             $condomino = Direcciones::with('usuario')->where('user_id', $request["id_selected"])->first();
+            $user_id = $condomino->usuario->id;
+            $check = Monthpayments::where('user_id', $user_id)->where('capture_month', $capture_month)
+            ->where('capture_year', $capture_year)->get();
 
-            $payment = Monthpayments::create([
-                "user_id" => $condomino->usuario->id,
-                "capture_month" => $capture_month,
-                "capture_year" => $capture_year,
-                "paid" => $payment
-            ]);
+            if(count($check) == 0){
+                $payment = Monthpayments::create([
+                    "user_id" => $user_id,
+                    "capture_month" => $capture_month,
+                    "capture_year" => $capture_year,
+                    "paid" => $payment
+                ]);
+                
+                return back()->with([
+                    "status" => "200",
+                    "message" => "Pago del condomino ".$condomino->condomino." registrado exitosamente",
+                ]);
+            }else{
+                return back()->with([
+                    "status" => "400",
+                    "message" => "El condomino ".$condomino->condomino." ya realizó el pago del mes ".$request["month_selected"],
+                ]);
+            }
+            
 
-            return back()->with('message', 'Pago registrado exitosamente');
+            
         }else{
             return view('errors.error400');
         }

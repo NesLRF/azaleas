@@ -39,4 +39,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function month_payments()
+    {
+        return $this->hasMany(Monthpayments::class);
+    }
+    
+    public function direccion()
+    {
+        return $this->hasOne(Direcciones::class);
+    }
+
+    public function properties()
+    {
+        return $this->belongsToMany(User::class, 'owner_condomino', 'user_id','direccion_id');
+    }
+
+    public function rents()
+    {
+        return $this->belongsToMany(User::class, 'tenant_condomino', 'user_id','direccion_id');
+    }
 }

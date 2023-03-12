@@ -49,4 +49,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Direcciones::class);
     }
+
+    public function properties()
+    {
+        return $this->belongsToMany(User::class, 'owner_condomino', 'user_id','direccion_id');
+    }
+
+    public function rents()
+    {
+        return $this->belongsToMany(User::class, 'tenant_condomino', 'user_id','direccion_id');
+    }
 }

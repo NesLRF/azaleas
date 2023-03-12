@@ -53,42 +53,49 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'password' => 'required|confirmed|min:6',
             'name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users'
         ]);
-
-        $condomino = Direcciones::find($request->condomino_id);
-        
-        switch($request->status){
-            case 'tenant':
-                $coincidencia = count($condomino->tenant)>0 ? true : false;
-                $type = 'rents';
-                break;
-            case 'owner':
-                $coincidencia = count($condomino->owner)>0 ? true : false;
-                $type = 'properties';
-                break;
-        }
-
-        if($coincidencia){
+        try{
+            $condomino = Direcciones::find($request->condomino_id);
+            
+            switch($request->status){
+                case 'tenant':
+                    $coincidencia = count($condomino->tenant)>0 ? true : false;
+                    $type = 'rents';
+                    break;
+                case 'owner':
+                    $coincidencia = count($condomino->owner)>0 ? true : false;
+                    $type = 'properties';
+                    break;
+            }
+    
+            if($coincidencia){
+                return back()->with([
+                    "status" => "400",
+                    "message" => "El condomino ".$condomino->condomino." ya tiene registrado un ". ($request->status == 'tenant' ? 'inquilino':'dueño' ),
+                ])->withInput();
+            }
+    
+            $user = new User();
+            $user->fill($request->all())->save();
+            $user->$type()->attach($request->condomino_id);
+    
             return back()->with([
-                "status" => "400",
-                "message" => "El condomino ".$condomino->condomino." ya tiene registrado un ". ($request->status == 'tenant' ? 'inquilino':'dueño' ),
-            ])->withInput();
+                "status" => "200",
+                "message" => "Usuario registrado exitosamente",
+            ]);
+        }catch(\Exception $e){
+            Log::info($e);
+            return back()->with([
+                "status" => "500",
+                "message" => "Ocurrio un error desconocido",
+            ]);
         }
-
-        $user = new User();
-        $user->fill($request->all())->save();
-        $user->$type()->attach($request->condomino_id);
-
-        return back()->with([
-            "status" => "200",
-            "message" => "Usuario registrado exitosamente",
-        ]);
+        
 
     }
 

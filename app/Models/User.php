@@ -39,14 +39,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function month_payments()
-    {
-        return $this->hasMany(Monthpayments::class);
-    }
-    
-    public function direccion()
-    {
-        return $this->hasOne(Direcciones::class);
-    }
 }

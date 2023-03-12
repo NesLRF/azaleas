@@ -44,18 +44,24 @@ class PaymentsController extends Controller
     public function payment_view()
     {
         if(Auth::user()->can('condomino_create')){
-            $condominos = Direcciones::select('user_id', 'condomino')->get()->toArray();
+            $condominos = Direcciones::select('id', 'condomino')->get()->toArray();
             $index = 0;
             foreach ($condominos as $key => $data) {
                 $info[$index++] = [
-                    'id' => $data["user_id"],
+                    'id' => $data["id"],
                     'text' => $data["condomino"]
                 ];
             }
 
             $info = json_encode($info);
 
-            return view('pages.payment_register', compact('info'));
+            $current_month = Carbon::now()->format('m');
+            $current_month = $current_month."-".Carbon::now()->format('Y');
+
+            $last_month = Carbon::now()->startOfMonth()->addMonths(13)->format('m');
+            $last_month = $last_month."-".Carbon::now()->startOfMonth()->addMonths(13)->format('Y');
+
+            return view('pages.payment_register', compact('info', 'current_month', 'last_month'));
         }else{
             return view('errors.error400');
         }
@@ -63,41 +69,112 @@ class PaymentsController extends Controller
 
     public function payment_create(Request $request)
     {
-        if(Auth::user()->can('condomino_create')){
-            Log::info($request);
-            $month_selected = '01-'.$request["month_selected"];
-            $month_selected_ff = (new Carbon($month_selected))->format('Y-m-d H:i:s');
-            $capture_month = (new Carbon($month_selected_ff))->format('m');
-            $capture_year = (new Carbon($month_selected_ff))->format('Y');
-            $payment = $request["amount_paid"];
-            $condomino = Direcciones::with('usuario')->where('user_id', $request["id_selected"])->first();
-            $user_id = $condomino->usuario->id;
-            $check = Monthpayments::where('user_id', $user_id)->where('capture_month', $capture_month)
-            ->where('capture_year', $capture_year)->get();
-
-            if(count($check) == 0){
-                $payment = Monthpayments::create([
-                    "user_id" => $user_id,
-                    "capture_month" => $capture_month,
-                    "capture_year" => $capture_year,
-                    "paid" => $payment
-                ]);
+        try {
+            if(Auth::user()->can('condomino_create')){
+                $month_selected = '01-'.$request["month_selected"];
+                $month_selected_ff = (new Carbon($month_selected))->format('Y-m-d H:i:s');
+                $capture_month = (new Carbon($month_selected_ff))->format('m');
+                $capture_year = (new Carbon($month_selected_ff))->format('Y');
+                $payment = $request["amount_paid"];
+                $description = $request["pay_registered_by"];
+                $condomino = Direcciones::find($request["id_selected"]);
+                $direccion_id = $condomino->id;
+                $check = Monthpayments::where('direccion_id', $direccion_id)->where('capture_month', $capture_month)
+                ->where('capture_year', $capture_year)->get();
+    
+                if(count($check) == 0){
+                    $payment = Monthpayments::create([
+                        "direccion_id" => $direccion_id,
+                        "capture_month" => $capture_month,
+                        "capture_year" => $capture_year,
+                        "paid" => $payment,
+                        "description" => $description
+                    ]);
+                    
+                    return back()->with([
+                        "status" => "200",
+                        "message" => "Pago del condomino ".$condomino->condomino." registrado exitosamente",
+                    ]);
+                }else{
+                    return back()->with([
+                        "status" => "400",
+                        "message" => "El condomino ".$condomino->condomino." ya realizó el pago del mes ".$request["month_selected"],
+                    ]);
+                }
                 
-                return back()->with([
-                    "status" => "200",
-                    "message" => "Pago del condomino ".$condomino->condomino." registrado exitosamente",
-                ]);
             }else{
-                return back()->with([
-                    "status" => "400",
-                    "message" => "El condomino ".$condomino->condomino." ya realizó el pago del mes ".$request["month_selected"],
-                ]);
+                return view('errors.error400');
             }
-            
+        } catch (\Throwable $th) {
+            Log::info("Error al registrar pago mensual");
+            Log::info($th);
+            return back()->with([
+                "status" => "500",
+                "message" => "Ocurrio un error desconocido, favor de contactar al administrador del sistema",
+            ]);
+        }
+    }
 
-            
-        }else{
-            return view('errors.error400');
+    public function annual_payment_create(Request $request)
+    {
+        try {
+            if(Auth::user()->can('condomino_create')){
+                Log::info("Pago anual");
+                Log::info($request);
+                $month_selected = '01-'.$request["month_selected"];
+                $month_selected_ff = (new Carbon($month_selected))->format('Y-m-d H:i:s');
+                $capture_month = (new Carbon($month_selected_ff))->format('m');
+                $capture_year = (new Carbon($month_selected_ff))->format('Y');
+                $payment = $request["amount_paid"];
+                $description = $request["pay_registered_by"];
+                $condomino = Direcciones::find($request["id_selected"]);
+                $direccion_id = $condomino->id;
+                $check = Monthpayments::where('direccion_id', $direccion_id)->where('capture_month', $capture_month)
+                ->where('capture_year', $capture_year)->get();
+
+                if(count($check) == 0){
+                    $payment = Monthpayments::create([
+                        "direccion_id" => $direccion_id,
+                        "capture_month" => $capture_month,
+                        "capture_year" => $capture_year,
+                        "paid" => 300,
+                        "description" => $description
+                    ]);
+
+                    for ($i=1; $i < 14; $i++) { 
+                        $capture_month = (new Carbon($month_selected_ff))->addMonths($i)->format('m');
+                        $capture_year = (new Carbon($month_selected_ff))->addMonths($i)->format('Y');
+
+                        $payment = Monthpayments::create([
+                            "direccion_id" => $direccion_id,
+                            "capture_month" => $capture_month,
+                            "capture_year" => $capture_year,
+                            "paid" => 300,
+                            "description" => $description
+                        ]);
+                    }
+                    
+                    
+                    return back()->with([
+                        "status" => "200",
+                        "message" => "Pago del condomino ".$condomino->condomino." registrado exitosamente",
+                    ]);
+                }else{
+                    return back()->with([
+                        "status" => "400",
+                        "message" => "El condomino ".$condomino->condomino." ya realizó el pago del mes ".$request["month_selected"],
+                    ]);
+                }
+            }else{
+                return view('errors.error400');
+            }
+        } catch (\Throwable $th) {
+            Log::info("Error al registrar pago anual");
+            Log::info($th);
+            return back()->with([
+                "status" => "500",
+                "message" => "Ocurrio un error desconocido, favor de contactar al administrador del sistema",
+            ]);
         }
     }
 }

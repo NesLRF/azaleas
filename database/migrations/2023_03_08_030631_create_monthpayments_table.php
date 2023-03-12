@@ -19,6 +19,7 @@ class CreateMonthpaymentsTable extends Migration
             $table->integer('capture_month');
             $table->integer('capture_year');
             $table->integer('paid');
+            $table->string('description');
             $table->foreign('direccion_id')->references('id')->on('direcciones')->cascadeOnDelete();
             $table->timestamps();
         });

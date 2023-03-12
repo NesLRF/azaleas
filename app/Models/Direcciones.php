@@ -23,4 +23,9 @@ class Direcciones extends Model
         return $this->belongsToMany(User::class, 'tenant_condomino', 'direccion_id', 'user_id');
     }
 
+    public function monthpayments()
+    {
+        return $this->hasMany(monthpayments::class);
+    }
+
 }

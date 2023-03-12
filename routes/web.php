@@ -26,6 +26,7 @@ Route::get('/monthly_payments', [App\Http\Controllers\PaymentsController::class,
 Route::post('/monthly_payments_i', [App\Http\Controllers\PaymentsController::class, 'user_import'])->name('user_i');
 Route::get('/payment_register', [App\Http\Controllers\PaymentsController::class, 'payment_view'])->name('pay_view');
 Route::post('/send_payment_data', [App\Http\Controllers\PaymentsController::class, 'payment_create'])->name('send_payment_data');
+Route::post('/send_payment_data_annual', [App\Http\Controllers\PaymentsController::class, 'annual_payment_create'])->name('send_annual_payment_data');
 
 // Auth::routes();
 

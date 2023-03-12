@@ -34,10 +34,6 @@ class UsersImport implements ToModel, WithHeadingRow
             'domicilio' => $row["dir"],
             'condomino' => $row["condomino"]
         ]);
-        // $user =  new Direcciones([
-        //     'domicilio' => $row["dir"],
-        //     'condomino' => $row["condomino"]
-        // ]);
 
         $user->save();
         $user->owner()->attach($row['user_id']);

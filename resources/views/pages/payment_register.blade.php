@@ -51,7 +51,7 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <label>Cobrado por:</label>
+                                        <label>Pagado por:</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" required name="pay_registered_by">
                                             <div class="input-group-append">
@@ -83,10 +83,14 @@
                     <div class="card-header">
                         <h3 class="card-title">Pago de mantenimiento anual</h3>
                     </div>
-                    <form action="{{ route('send_payment_data') }}" method="POST" id="pay-form">
+                    <form action="{{ route('send_annual_payment_data') }}" method="POST" id="pay-form">
                         @csrf
                         <div class="card-body">
                             <div class="form-group">
+                                <div class="callout callout-warning">
+                                    <h5>Al Pagar anualidad!</h5>
+                                    <p>Si se realiza el pago de este mes {{$current_month}} se bonificará el 13avo mes del siguiente año {{$last_month}}</p>
+                                </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <label>No. de condomino:</label>
@@ -95,7 +99,7 @@
                                         </select>
                                     </div>
                                     <div class="col-6">
-                                        <label>Mes a pagar:</label>
+                                        <label>A partir del mes:</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
@@ -122,7 +126,7 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <label>Cobrado por:</label>
+                                        <label>Pagado por:</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" required name="pay_registered_by">
                                             <div class="input-group-append">
@@ -143,7 +147,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-info" type="submit">Registrar</button>
+                            <button class="btn btn-warning" type="submit">Registrar</button>
                             <button type="reset" class="btn btn-outline-danger float-right">Cancel</button>
                         </div>
                     </form>
@@ -212,7 +216,6 @@
                 closeButton: true,
                 fadeOut: 1000,
                 extendedTimeOut: 1000,
-                iconClass: 'toast-info',
                 positionClass: 'toast-top-right',
                 timeOut: 10000,
                 progressBar: true,
@@ -235,6 +238,20 @@
             toastr.info("{{ Session::get('message') }}, verifique la información");
         </script>
     @endif
+    @if (Session::get('status') == 500)
+        <script>
+            toastr.options = {
+                fadeIn: 1000,
+                closeButton: true,
+                fadeOut: 1000,
+                extendedTimeOut: 1000,
+                positionClass: 'toast-top-right',
+                progressBar: true,
+                timeOut: 15000,
+            };
+            toastr.error("{{ Session::get('message') }}");
+        </script>
+    @endif
 @endsection
 
 @section('stilos')
@@ -243,11 +260,21 @@
             color: #444;
             line-height: 18px
         }
-        .card-warning:not(.card-outline)>.card-header, .card-warning:not(.card-outline)>.card-header a {
+
+        .card-warning:not(.card-outline)>.card-header,
+        .card-warning:not(.card-outline)>.card-header a {
             color: #ffffff;
         }
+
         .card-warning:not(.card-outline)>.card-header {
             background-color: #605ca8;
+        }
+
+        .btn-warning {
+            color: #f8f9fa;
+            background-color: #605ca8;
+            border-color: #605ca8;
+            box-shadow: none;
         }
     </style>
 @endsection

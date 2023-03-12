@@ -6,6 +6,7 @@ use App\Models\Direcciones;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -79,10 +80,13 @@ class UserController extends Controller
                     "message" => "El condomino ".$condomino->condomino." ya tiene registrado un ". ($request->status == 'tenant' ? 'inquilino':'dueño' ),
                 ])->withInput();
             }
+            $request["password"] = Hash::make($request['password']);
     
             $user = new User();
             $user->fill($request->all())->save();
             $user->$type()->attach($request->condomino_id);
+
+            $user->assignRole('Vecino');
     
             return back()->with([
                 "status" => "200",

@@ -28,7 +28,7 @@
                     <!-- small card -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>44</h3>
+                            <h3>{{$total_neighbors}}</h3>
 
                             <p>Vecinos registrados</p>
                         </div>
@@ -120,7 +120,7 @@
                                 <!-- /.col -->
                                 <div class="col-md-4">
                                     <p class="text-center">
-                                        <strong>Goal Completion</strong>
+                                        <strong>Metas alcanzadas</strong>
                                     </p>
 
                                     <div class="progress-group">

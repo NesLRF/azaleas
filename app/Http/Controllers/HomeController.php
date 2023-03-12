@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,10 +36,20 @@ class HomeController extends Controller
             "current_month" => $mes,
             "current_month_year" => $current_month_year 
         ];
-        Log::info($mes);
         if(Auth::user()->can('user_create')){
             Log::info("Es Admin o SuperAdmin");
+            $total_users = User::with('roles')->get();
+            foreach ($total_users as $user) {
+                if($user->roles->first()->name == 'Vecino'){
+                    $total_neighbors[] = [
+                        $user->roles->first()->name
+                    ];
+                }
+            }
+            $total_neighbors = count($total_neighbors);
+            // $total_users = $total_users->roles->where('name', 'Vecino');
+            $total_users = count($total_users);
         }
-        return view('pages.home', compact('months'));
+        return view('pages.home', compact('months', 'total_neighbors'));
     }
 }

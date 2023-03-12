@@ -18,26 +18,34 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-6">
-                                        <label>Nombre:</label>
+                                        <label>Nombres:</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 {{-- <span class="input-group-text">
                                                     <i class="fas fa-dollar-sign"></i>
                                                 </span> --}}
                                             </div>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror" required name="name" value="{{old('name')}}">
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre(s)" required name="name" value="{{old('name')}}">
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <label>Apellido:</label>
+                                        <label>Apellidos:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" required name="last_name" value="{{old('last_name')}}">
+                                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" placeholder="Apellidos" required name="last_name" value="{{old('last_name')}}">
                                             {{-- <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fas fa-check"></i></span>
                                             </div> --}}
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <label>Correo:</label>
+                            <div class="input-group mb-3">
+                                
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{old('email')}}">
                             </div>
                             <label>Contraseña:</label>
                             <div class="input-group mb-3">
@@ -54,14 +62,6 @@
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Confirmar contraseña" name="password_confirmation">
-                            </div>
-                            <label>Correo:</label>
-                            <div class="input-group mb-3">
-                                
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                </div>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{old('email')}}">
                             </div>
                             <div class="form-group">
                                 <div class="row">
@@ -187,6 +187,20 @@
                 timeOut: 15000,
             };
             toastr.info("{{ Session::get('message') }}, verifique la información");
+        </script>
+    @endif
+    @if (Session::get('status') == 500)
+        <script>
+            toastr.options = {
+                fadeIn: 1000,
+                closeButton: true,
+                fadeOut: 1000,
+                extendedTimeOut: 1000,
+                positionClass: 'toast-top-right',
+                progressBar: true,
+                timeOut: 15000,
+            };
+            toastr.error("{{ Session::get('message') }}");
         </script>
     @endif
 @endsection

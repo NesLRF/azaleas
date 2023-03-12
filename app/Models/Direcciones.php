@@ -10,12 +10,17 @@ class Direcciones extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'domicilio', 'condomino',
+        'domicilio', 'condomino',
     ];
 
-    public function usuario()
+    public function owner()
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->belongsToMany(User::class, 'owner_condomino', 'direccion_id', 'user_id');
+    }
+
+    public function tenant()
+    {
+        return $this->belongsToMany(User::class, 'tenant_condomino', 'direccion_id', 'user_id');
     }
 
 }

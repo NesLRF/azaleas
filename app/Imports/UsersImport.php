@@ -17,18 +17,28 @@ class UsersImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        // $user =  new User([
-        //     'name' => $row["nombre"],
-        //     'email' => $row["correo"],
-        //     'password' => $row["pass"]
-        // ]);
+
+        // para usuarios
+        //     $user =  new User([
+        //         'name' => $row["nombre"],
+        //         'email' => $row["correo"],
+        //         'password' => $row["pass"]
+        //     ]);
+
+        // $user->assignRole('Vecino');
+        // fin usuarios
+
+
+        // para direcciones 
         $user =  new Direcciones([
-            'user_id' => $row["user_id"],
             'domicilio' => $row["dir"],
             'condomino' => $row["condomino"]
         ]);
 
-        // $user->assignRole('Vecino');
+        $user->save();
+        $user->owner()->attach($row['user_id']);
+        // fin direcciones
+        
 
         return $user;
     }

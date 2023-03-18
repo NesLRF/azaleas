@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDireccionesTable extends Migration
+class CreateAnnualFeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateDireccionesTable extends Migration
      */
     public function up()
     {
-        Schema::create('direcciones', function (Blueprint $table) {
+        Schema::create('annual_fees', function (Blueprint $table) {
             $table->id();
-            $table->string('domicilio');
-            $table->string('condomino');
+            $table->integer('cuota');
+            $table->integer('year');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +29,6 @@ class CreateDireccionesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('direcciones');
+        Schema::dropIfExists('annual_fees');
     }
 }

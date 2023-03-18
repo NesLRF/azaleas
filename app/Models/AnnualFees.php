@@ -6,19 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Monthpayments extends Model
+class AnnualFees extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    public $table = 'monthpayments';
+    public $table = 'annual_fees';
 
     protected $fillable = [
-        'direccion_id', 'capture_month', 'capture_year', 'paid', 'description'
+        'cuota',
+        'year'
     ];
 
-    public function direccion()
-    {
-        return $this->hasMany(Direcciones::class);
-    }
 }

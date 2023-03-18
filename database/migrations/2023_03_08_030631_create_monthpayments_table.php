@@ -22,6 +22,7 @@ class CreateMonthpaymentsTable extends Migration
             $table->string('description');
             $table->foreign('direccion_id')->references('id')->on('direcciones')->cascadeOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

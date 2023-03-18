@@ -20,6 +20,7 @@ class CreateTenantCondominoTable extends Migration
             $table->unsignedBigInteger('direccion_id');
             $table->foreign('direccion_id')->references('id')->on('direcciones')->cascadeOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

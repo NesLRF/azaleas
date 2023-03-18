@@ -81,7 +81,7 @@
             <div class="col-md-4">
                 <div class="card card-warning">
                     <div class="card-header">
-                        <h3 class="card-title">Pago de mantenimiento anual</h3>
+                        <h3 class="card-title">Multi pago</h3>
                     </div>
                     <form action="{{ route('send_annual_payment_data') }}" method="POST" id="pay-form">
                         @csrf
@@ -89,7 +89,7 @@
                             <div class="form-group">
                                 <div class="callout callout-warning">
                                     <h5>Al Pagar anualidad!</h5>
-                                    <p>Si se realiza el pago de este mes {{$current_month}} se bonificará el 13avo mes del siguiente año {{$last_month}}</p>
+                                    <p>Si se realiza el pago de este mes {{$current_month}} se bonificará el 13avo mes {{$last_month}}</p>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
@@ -126,7 +126,7 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <label>Pagado por:</label>
+                                        <label>Descripción:</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" required name="pay_registered_by">
                                             <div class="input-group-append">
@@ -269,6 +269,7 @@
         .card-warning:not(.card-outline)>.card-header {
             background-color: #605ca8;
         }
+
 
         .btn-warning {
             color: #f8f9fa;

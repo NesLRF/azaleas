@@ -38,7 +38,8 @@
                             </div>
                             <label>Descripcion:</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Comentario..." name="description" value="{{old('description')}}">
+                                <input type="text" class="form-control" placeholder="Comentario..." name="description"
+                                    value="{{ old('description') }}">
                             </div>
                         </div>
                         <div class="card-footer">
@@ -56,31 +57,31 @@
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
-                            <tr>
-                              <th>Tipo de gasto</th>
-                              <th>Cantidad</th>
-                              <th>Comentario</th>
-                              <th>Fecha</th>
-                            </tr>
+                                <tr>
+                                    <th>Tipo de gasto: </th>
+                                    <th>Cantidad: </th>
+                                    <th>Comentario: </th>
+                                    <th>Fecha: </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach ($bills as $item)
                                     <tr>
-                                        <td>{{$item->type->name}}</td>
-                                        <td>{{$item->amount}}</td>
-                                        <td>{{$item->description}}</td>
-                                        <td>{{$item->created_at}}</td>
+                                        <td>{{ $item->type->name }}</td>
+                                        <td>${{ $item->amount }}</td>
+                                        <td>{{ $item->description }}</td>
+                                        <td>{{ $item->created_at }}</td>
                                     </tr>
                                 @endforeach
-                            
-                            
-                          </table>
+
+
+                        </table>
                     </div>
                     {{-- <div class="card-footer">
                         <button class="btn btn-info" type="submit">Registrar</button>
                         <button type="reset" class="btn btn-outline-danger float-right">Cancel</button>
                     </div> --}}
-                    
+
                 </div>
             </div>
         </div>
@@ -95,13 +96,62 @@
     <script src="/adminlte/plugins/moment/moment.min.js"></script>
     <script src="/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>
     <script src="/adminlte/plugins/toastr/toastr.min.js"></script>
-    <script src={{asset('adminlte/plugins/datatables/jquery.dataTables.js')}}> </script>
+    <script src="/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+    {{-- <script src={{asset('adminlte/plugins/datatables/jquery.dataTables.js')}}> </script> --}}
+    <script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/jszip/jszip.min.js"></script>
+    <script src="/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $("#example1").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": [{
+                        extend: 'copy',
+                        text: 'Copiar',
+                        "titleAttr": "Copiar",
+                        "className": "btn btn-secondary"
+                    },
+                    {
+                        extend: 'csv',
+                        text: 'csv',
+                        "titleAttr": "Esportar a CSV",
+                        "className": "btn btn-info"
+                    },
+                    {
+                        extend: 'excel',
+                        "titleAttr": "Esportar a Excel",
+                        "className": "btn btn-success"
+                    },
+                    {
+                        extend: 'print',
+                        "titleAttr": "Imprimir archivo",
+                        text: 'PDF',
+                        "className": "btn btn-danger"
+                    }
+                ],
+                "oLanguage": {
+                    "sSearch": "Buscar:",
+                    "sEmptyTable": "No hay informacion que mostrar",
+                    "sInfo": "Mostrando  del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Showing 0 to 0 of 0 records",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                },
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
         var data = {!! $types !!}
@@ -110,42 +160,9 @@
                 data: data,
 
             });
-            
+
 
         })
-        $('[data-mask]').inputmask()
-        //validations
-        // $(function() {
-        //     $('#pay-form').validate({
-        //         rules: {
-        //             id_selected: {
-        //                 required: true,
-        //             },
-        //             month_selected: {
-        //                 required: true,
-        //             },
-        //         },
-        //         messages: {
-        //             id_selected: {
-        //                 required: "Seleccione un condomino",
-        //             },
-        //             month_selected: {
-        //                 required: "Seleccione el mes a pagar",
-        //             },
-        //         },
-        //         errorElement: 'span',
-        //         errorPlacement: function(error, element) {
-        //             error.addClass('invalid-feedback');
-        //             element.closest('.form-group').append(error);
-        //         },
-        //         highlight: function(element, errorClass, validClass) {
-        //             $(element).addClass('is-invalid');
-        //         },
-        //         unhighlight: function(element, errorClass, validClass) {
-        //             $(element).removeClass('is-invalid');
-        //         }
-        //     });
-        // });
     </script>
     @if (Session::get('status') == 200)
         <script>
@@ -199,9 +216,12 @@
             color: #444;
             line-height: 18px
         }
-        .card-warning:not(.card-outline)>.card-header, .card-warning:not(.card-outline)>.card-header a {
+
+        .card-warning:not(.card-outline)>.card-header,
+        .card-warning:not(.card-outline)>.card-header a {
             color: #ffffff;
         }
+
         .card-warning:not(.card-outline)>.card-header {
             background-color: #605ca8;
         }

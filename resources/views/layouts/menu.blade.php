@@ -69,6 +69,14 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('bills.index') }}" class="nav-link">
+        <i class="nav-icon far fa-plus-square"></i>
+        <p>
+            Registrar gastos
+        </p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('users.create') }}" class="nav-link">
         <i class="nav-icon far fa-plus-square"></i>
         <p>

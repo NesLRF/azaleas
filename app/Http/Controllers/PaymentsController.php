@@ -46,6 +46,9 @@ class PaymentsController extends Controller
     {
         if(Auth::user()->can('condomino_create')){
             $condominos = Direcciones::select('id', 'condomino')->get()->toArray();
+            $current_month = Carbon::now()->firstOfMonth()->format('m');
+            $current_year = Carbon::now()->firstOfMonth()->format('Y');
+            
             $index = 0;
             foreach ($condominos as $key => $data) {
                 $info[$index++] = [
@@ -67,7 +70,7 @@ class PaymentsController extends Controller
             $fee = AnnualFees::where('year', $current_year)->first();
             $fee = $fee->cuota;
 
-            return view('pages.payment_register', compact('info', 'current_month', 'last_month'));
+            return view('pages.payment_register', compact('info', 'current_month', 'last_month', 'fee'));
         }else{
             return view('errors.error400');
         }

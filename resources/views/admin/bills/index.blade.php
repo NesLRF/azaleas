@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
                                 <div class="col-5">
-                                    <label>A partir del mes:</label>
+                                    <label>Del mes:</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>

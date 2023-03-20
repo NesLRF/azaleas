@@ -47,7 +47,8 @@
                                                     <i class="fas fa-dollar-sign"></i>
                                                 </span>
                                             </div>
-                                            <input type="number" class="form-control" required name="amount_paid">
+                                            <input type="number" class="form-control" required name="amount_paid"
+                                                value="{{ $fee }}" disabled>
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -88,9 +89,19 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="callout callout-warning">
-                                    <h5>Al Pagar anualidad!</h5>
-                                    <p>Si se realiza el pago de este mes {{$current_month}} se bonificará el 13avo mes {{$last_month}}</p>
+                                    <h5><strong>Al Pagar Anualidad!</strong></h5>
+                                    <p>Si se realiza el pago de este mes {{ $current_month }} se bonificará el 13avo
+                                        mes {{ $last_month }}</p>
                                 </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Meses a Pagar:</label>
+                                        <select class="form-control month_select" data-placeholder="Select a State"
+                                            name="id_selected" style="width: 100%;">
+                                        </select>
+                                    </div>
+                                </div>
+                                <br>
                                 <div class="row">
                                     <div class="col-6">
                                         <label>No. de condomino:</label>
@@ -111,7 +122,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-6">
@@ -122,7 +132,8 @@
                                                     <i class="fas fa-dollar-sign"></i>
                                                 </span>
                                             </div>
-                                            <input type="number" class="form-control" required name="amount_paid">
+                                            <input type="number" class="form-control" required name="amount_paid"
+                                                value="{{ $fee }}" disabled>
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -173,40 +184,57 @@
 
             });
 
-        })
+            $('.month_select').select2({
+                data: [{
+                        "id": 2,
+                        "text": "2"
+                    },
+                    {
+                        "id": 3,
+                        "text": "3"
+                    },
+                    {
+                        "id": 4,
+                        "text": "4"
+                    },
+                    {
+                        "id": 5,
+                        "text": "5"
+                    },
+                    {
+                        "id": 6,
+                        "text": "6"
+                    },
+                    {
+                        "id": 7,
+                        "text": "7"
+                    },
+                    {
+                        "id": 8,
+                        "text": "8"
+                    },
+                    {
+                        "id": 9,
+                        "text": "9"
+                    },
+                    {
+                        "id": 10,
+                        "text": "10"
+                    },
+                    {
+                        "id": 11,
+                        "text": "11"
+                    },
+                    {
+                        "id": 12,
+                        "text": "12"
+                    }
+                ],
+            });
+
+        });
+
         $('[data-mask]').inputmask()
-        //validations
-        // $(function() {
-        //     $('#pay-form').validate({
-        //         rules: {
-        //             id_selected: {
-        //                 required: true,
-        //             },
-        //             month_selected: {
-        //                 required: true,
-        //             },
-        //         },
-        //         messages: {
-        //             id_selected: {
-        //                 required: "Seleccione un condomino",
-        //             },
-        //             month_selected: {
-        //                 required: "Seleccione el mes a pagar",
-        //             },
-        //         },
-        //         errorElement: 'span',
-        //         errorPlacement: function(error, element) {
-        //             error.addClass('invalid-feedback');
-        //             element.closest('.form-group').append(error);
-        //         },
-        //         highlight: function(element, errorClass, validClass) {
-        //             $(element).addClass('is-invalid');
-        //         },
-        //         unhighlight: function(element, errorClass, validClass) {
-        //             $(element).removeClass('is-invalid');
-        //         }
-        //     });
-        // });
     </script>
     @if (Session::get('status') == 200)
         <script>

@@ -48,7 +48,7 @@
                                                 </span>
                                             </div>
                                             <input type="number" class="form-control" required name="amount_paid"
-                                                value="{{ $fee }}" disabled>
+                                                value="{{$fee}}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -97,7 +97,7 @@
                                     <div class="col-6">
                                         <label>Meses a Pagar:</label>
                                         <select class="form-control month_select" data-placeholder="Select a State"
-                                            name="id_selected" style="width: 100%;">
+                                            name="total_month" style="width: 100%;">
                                         </select>
                                     </div>
                                 </div>
@@ -133,7 +133,7 @@
                                                 </span>
                                             </div>
                                             <input type="number" class="form-control" required name="amount_paid"
-                                                value="{{ $fee }}" disabled>
+                                                value="{{ $fee }}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-6">

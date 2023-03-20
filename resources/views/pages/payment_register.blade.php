@@ -51,7 +51,7 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <label>Pagado por:</label>
+                                        <label>Descripción:</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" required name="pay_registered_by">
                                             <div class="input-group-append">
@@ -73,7 +73,7 @@
                         </div>
                         <div class="card-footer">
                             <button class="btn btn-info" type="submit">Registrar</button>
-                            <button type="reset" class="btn btn-outline-danger float-right">Cancel</button>
+                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -148,7 +148,7 @@
                         </div>
                         <div class="card-footer">
                             <button class="btn btn-warning" type="submit">Registrar</button>
-                            <button type="reset" class="btn btn-outline-danger float-right">Cancel</button>
+                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -158,9 +158,8 @@
 @endsection
 
 @section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="/adminlte/plugins/jquery/jquery.min.js"></script>
+    <script src="/adminlte/plugins/select2/js/select2.full.min.js"></script>
     <script src="/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
     <script src="/adminlte/plugins/moment/moment.min.js"></script>
     <script src="/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>

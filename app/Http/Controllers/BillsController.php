@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bills;
 use App\Models\BillsType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -18,8 +19,17 @@ class BillsController extends Controller
     {
         $bills = Bills::orderBy('created_at','desc')->paginate(10);
         $types = BillsType::select('id','name as text')->get()->toArray();
+
+        $current_month = Carbon::now()->firstOfMonth()->format('m');
+        $current_year = Carbon::now()->firstOfMonth()->format('Y');
+
+        $total_fixed = Bills::where('capture_month', $current_month)->where('capture_year', $current_year)->where('bills_type_id', '!=', 11)->get();
+        $total_others = Bills::where('capture_month', $current_month)->where('capture_year', $current_year)->where('bills_type_id', 11)->get();
+        $total_fixed = count($total_fixed);
+        $total_others = count($total_others);
+
         $types = json_encode($types);
-        return view('admin.bills.index', compact('types','bills'));
+        return view('admin.bills.index', compact('types','bills', 'total_fixed', 'total_others'));
     }
 
     /**
@@ -44,12 +54,24 @@ class BillsController extends Controller
         $request->validate([
             'bills_type_id' => 'required',
             'amount' => 'required|integer',
-            'description' => 'nullable'
+            'description' => 'required',
+            'month_selected' => 'required'
         ]);
+
+        $month_selected = '01-'.$request["month_selected"];
+        $month_selected_ff = (new Carbon($month_selected))->format('Y-m-d H:i:s');
+        $capture_month = (new Carbon($month_selected_ff))->format('m');
+        $capture_year = (new Carbon($month_selected_ff))->format('Y');
+
         try{
-            $bill = new Bills();
-            $bill->fill($request->all());
-            $bill->save(); 
+            $bill = new Bills([
+                'bills_type_id' => $request["bills_type_id"],
+                'amount' => $request["amount"],
+                'description' => $request["description"],
+                'capture_year' => $capture_year,
+                'capture_month' => $capture_month
+            ]);
+            $bill->save();
 
             return back()->with([
                 "status" => "200",

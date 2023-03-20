@@ -67,9 +67,6 @@ class PaymentsController extends Controller
             $fee = AnnualFees::where('year', $current_year)->first();
             $fee = $fee->cuota;
 
-            Log::info("Año de cuota");
-            Log::info($fee);
-
             return view('pages.payment_register', compact('info', 'current_month', 'last_month'));
         }else{
             return view('errors.error400');

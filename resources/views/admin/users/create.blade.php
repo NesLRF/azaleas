@@ -98,7 +98,7 @@
                         </div>
                         <div class="card-footer">
                             <button class="btn btn-info" type="submit">Registrar</button>
-                            <button type="reset" class="btn btn-outline-danger float-right">Cancel</button>
+                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
                         </div>
                     </form>
                 </div>

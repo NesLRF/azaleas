@@ -62,25 +62,25 @@
 </li>
 <li class="nav-item">
     <a href="{{ route('pay_view') }}" class="nav-link">
-        <i class="nav-icon far fa-plus-square"></i>
+        <i class="fas fa-money-bill-wave"></i>
         <p>
-            Registrar pagos
+            Registrar Pagos
         </p>
     </a>
 </li>
 <li class="nav-item">
     <a href="{{ route('bills.index') }}" class="nav-link">
-        <i class="nav-icon far fa-plus-square"></i>
+        <i class="fas fa-hand-holding-usd"></i>
         <p>
-            Registrar gastos
+            Registrar Gastos
         </p>
     </a>
 </li>
 <li class="nav-item">
     <a href="{{ route('users.create') }}" class="nav-link">
-        <i class="nav-icon far fa-plus-square"></i>
+        <i class="fas fa-user-plus"></i>
         <p>
-            Registrar usuarios
+            Registrar Usuarios
         </p>
     </a>
 </li>

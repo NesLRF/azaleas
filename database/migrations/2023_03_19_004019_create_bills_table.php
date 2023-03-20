@@ -19,6 +19,8 @@ class CreateBillsTable extends Migration
             $table->foreign('bills_type_id')->references('id')->on('bills_types')->cascadeOnDelete();
             $table->integer('amount');
             $table->text('description')->nullable();
+            $table->integer('capture_year');
+            $table->integer('capture_month');
             $table->softDeletes();
             $table->timestamps();
         });

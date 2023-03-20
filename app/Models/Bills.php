@@ -16,7 +16,9 @@ class Bills extends Model
     protected $fillable = [
         'bills_type_id',
         'amount',
-        'description'
+        'description',
+        'capture_year',
+        'capture_month'
     ];
 
     public function type(){

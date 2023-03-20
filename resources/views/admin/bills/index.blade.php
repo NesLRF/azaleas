@@ -7,10 +7,10 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Registrar gasto</h3>
+                        <h3 class="card-title">Gastos Fijos y Otros Gastos</h3>
                     </div>
                     <form action="{{ route('bills.store') }}" method="POST" id="pay-form">
                         @csrf
@@ -36,23 +36,71 @@
                                     </div>
                                 </div>
                             </div>
-                            <label>Descripcion:</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Comentario..." name="description"
-                                    value="{{ old('description') }}">
+                            <div class="row">
+                                <div class="col-7">
+                                    <label>Descripcion:</label>
+                                    <div class="input-group mb-3">
+                                        <textarea class="form-control" placeholder="Comentario..." required name="description" value="{{ old('description') }}"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-5">
+                                    <label>A partir del mes:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" data-inputmask-alias="datetime"
+                                            data-inputmask-inputformat="mm-yyyy" data-mask name="month_selected" required>
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                         <div class="card-footer">
                             <button class="btn btn-info" type="submit">Registrar</button>
-                            <button type="reset" class="btn btn-outline-danger float-right">Cancel</button>
+                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
                         </div>
                     </form>
                 </div>
             </div>
-            <div class="col">
+
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box bg-info">
+                    <span class="info-box-icon"><i class="far fa-chart-bar"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total de Gastos Fijos</span>
+                        <span class="info-box-number">{{$total_fixed}}</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: {{$total_fixed}}%"></div>
+                        </div>
+                        <span class="progress-description">
+                            Disminución de Gastos Fijos en 70%
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box bg-warning">
+                    <span class="info-box-icon"><i class="fas fa-hand-holding-usd"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total de Otros Gastos</span>
+                        <span class="info-box-number">{{$total_others}}</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: {{$total_others}}%"></div>
+                        </div>
+                        <span class="progress-description">
+                            Disminución de Otros Gastos en 60%
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Registrar gasto</h3>
+                        <h3 class="card-title">Todos los gastos</h3>
                     </div>
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
@@ -70,22 +118,15 @@
                                         <td>{{ $item->type->name }}</td>
                                         <td>${{ $item->amount }}</td>
                                         <td>{{ $item->description }}</td>
-                                        <td>{{ $item->created_at }}</td>
+                                        <td>{{ $item->capture_month }}-{{ $item->capture_year}}</td>
                                     </tr>
                                 @endforeach
-
-
+                            </tbody>
                         </table>
-                        <div class="d-flex justify-content-end">
-                            {!! $bills->links() !!}
-                        </div>
-                        {{-- {{$bills->links()}} --}}
                     </div>
-                    {{-- <div class="card-footer">
-                        <button class="btn btn-info" type="submit">Registrar</button>
-                        <button type="reset" class="btn btn-outline-danger float-right">Cancel</button>
-                    </div> --}}
-
+                    <div class="card-footer d-flex justify-content-end">
+                        {!! $bills->links() !!}
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,44 +163,39 @@
                 "autoWidth": false,
                 "paging": false,
                 "info": false,
-                "buttons": [{
-                        extend: 'copy',
-                        text: 'Copiar',
-                        "titleAttr": "Copiar",
-                        "className": "btn btn-secondary"
-                    },
-                    {
-                        extend: 'csv',
-                        text: 'csv',
-                        "titleAttr": "Esportar a CSV",
-                        "className": "btn btn-info"
-                    },
-                    {
-                        extend: 'excel',
-                        "titleAttr": "Esportar a Excel",
-                        "className": "btn btn-success"
-                    },
-                    {
-                        extend: 'print',
-                        "titleAttr": "Imprimir archivo",
-                        text: 'PDF',
-                        "className": "btn btn-danger"
-                    }
-                ],
+                "ordering": false,
+                // "buttons": [{
+                //         extend: 'copy',
+                //         text: 'Copiar',
+                //         "titleAttr": "Copiar",
+                //         "className": "btn btn-secondary"
+                //     },
+                //     {
+                //         extend: 'csv',
+                //         text: 'csv',
+                //         "titleAttr": "Esportar a CSV",
+                //         "className": "btn btn-info"
+                //     },
+                //     {
+                //         extend: 'excel',
+                //         "titleAttr": "Esportar a Excel",
+                //         "className": "btn btn-success"
+                //     },
+                //     {
+                //         extend: 'print',
+                //         "titleAttr": "Imprimir archivo",
+                //         text: 'PDF',
+                //         "className": "btn btn-danger"
+                //     }
+                // ],
                 "oLanguage": {
                     "sSearch": "Buscar:",
                     "sEmptyTable": "No hay informacion que mostrar",
                     "sInfo": "Mostrando  del _START_ al _END_ de un total de _TOTAL_ registros",
-                    "sInfoEmpty": "Showing 0 to 0 of 0 records",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Último",
-                        "sNext": "Siguiente",
-                        "sPrevious": "Anterior"
-                    },
                 },
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
+        $('[data-mask]').inputmask();
         var data = {!! $types !!}
         $(function() {
             $('.select2').select2({
@@ -232,4 +268,7 @@
             background-color: #605ca8;
         }
     </style>
+@endsection
+
+@section('fonts')
 @endsection

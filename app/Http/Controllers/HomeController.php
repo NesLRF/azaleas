@@ -27,29 +27,32 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $current_month = Carbon::now()->startOfMonth()->format('M');
-        $current_month_year = Carbon::now()->startOfMonth()->format('Y');
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        $fecha = Carbon::parse($current_month);
-        $mes = $meses[($fecha->format('n')) - 1];
-        $months =  [
-            "current_month" => $mes,
-            "current_month_year" => $current_month_year 
-        ];
-        if(Auth::user()->can('user_create')){
-            Log::info("Es Admin o SuperAdmin");
-            $total_users = User::with('roles')->get();
-            foreach ($total_users as $user) {
-                if($user->roles->first()->name == 'Vecino'){
-                    $total_neighbors[] = [
-                        $user->roles->first()->name
-                    ];
+        if(in_array( Auth::user()->getRoleNames()->first(),['Admin','SuperAdmin'])){
+            $current_month = Carbon::now()->startOfMonth()->format('M');
+            $current_month_year = Carbon::now()->startOfMonth()->format('Y');
+            $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            $fecha = Carbon::parse($current_month);
+            $mes = $meses[($fecha->format('n')) - 1];
+            $months =  [
+                "current_month" => $mes,
+                "current_month_year" => $current_month_year 
+            ];
+            
+                $total_users = User::with('roles')->get();
+                foreach ($total_users as $user) {
+                    if($user->roles->first()->name == 'Vecino'){
+                        $total_neighbors[] = [
+                            $user->roles->first()->name
+                        ];
+                    }
                 }
-            }
-            $total_neighbors = count($total_neighbors);
-            // $total_users = $total_users->roles->where('name', 'Vecino');
-            $total_users = count($total_users);
+                $total_neighbors = count($total_neighbors);
+                // $total_users = $total_users->roles->where('name', 'Vecino');
+                $total_users = count($total_users);
+            
+            return view('pages.home', compact('months', 'total_neighbors'));
+        }else{
+            return view('errors.error400');
         }
-        return view('pages.home', compact('months', 'total_neighbors'));
     }
 }

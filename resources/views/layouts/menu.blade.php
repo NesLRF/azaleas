@@ -51,7 +51,7 @@
 </li>
 @hasanyrole('SuperAdmin|Admin')
     <li class="nav-header">Administrador</li>
-@endhasanyrole
+
 <li class="nav-item">
     <a href="{{ route('month_data') }}" class="nav-link">
         <i class="nav-icon far fa-plus-square"></i>
@@ -84,3 +84,12 @@
         </p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('visits.index') }}" class="nav-link">
+        <i class="fas fa-user-plus"></i>
+        <p>
+            Visitas
+        </p>
+    </a>
+</li>
+@endhasanyrole

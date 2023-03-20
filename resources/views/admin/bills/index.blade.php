@@ -76,6 +76,10 @@
 
 
                         </table>
+                        <div class="d-flex justify-content-end">
+                            {!! $bills->links() !!}
+                        </div>
+                        {{-- {{$bills->links()}} --}}
                     </div>
                     {{-- <div class="card-footer">
                         <button class="btn btn-info" type="submit">Registrar</button>
@@ -116,6 +120,8 @@
                 "responsive": true,
                 "lengthChange": false,
                 "autoWidth": false,
+                "paging": false,
+                "info": false,
                 "buttons": [{
                         extend: 'copy',
                         text: 'Copiar',

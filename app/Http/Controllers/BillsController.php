@@ -16,7 +16,7 @@ class BillsController extends Controller
      */
     public function index()
     {
-        $bills = Bills::all();
+        $bills = Bills::orderBy('created_at','desc')->paginate(10);
         $types = BillsType::select('id','name as text')->get()->toArray();
         $types = json_encode($types);
         return view('admin.bills.index', compact('types','bills'));

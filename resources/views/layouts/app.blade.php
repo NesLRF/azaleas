@@ -155,7 +155,9 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
+                                @role('Admin|SuperAdmin')
                                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                                @endrole
                                 <li class="breadcrumb-item active">@yield('title')</li>
                             </ol>
                         </div>

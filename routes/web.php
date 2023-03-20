@@ -28,6 +28,7 @@ Route::get('/payment_register', [App\Http\Controllers\PaymentsController::class,
 Route::post('/send_payment_data', [App\Http\Controllers\PaymentsController::class, 'payment_create'])->name('send_payment_data');
 Route::resource('users',App\Http\Controllers\UserController::class);
 Route::resource('bills',App\Http\Controllers\BillsController::class);
+Route::resource('visits',App\Http\Controllers\VisitsController::class);
 Route::post('/send_payment_data_annual', [App\Http\Controllers\PaymentsController::class, 'multi_payment_create'])->name('send_annual_payment_data');
 
 // Auth::routes();

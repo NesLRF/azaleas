@@ -84,6 +84,18 @@
         </p>
     </a>
 </li>
+@endhasanyrole
+@hasanyrole('Guardia')
+<li class="nav-item">
+    <a href="{{ route('visits.create') }}" class="nav-link">
+        <i class="fas fa-user-plus"></i>
+        <p>
+            Registrar visita
+        </p>
+    </a>
+</li>
+@endhasanyrole
+@hasanyrole('SuperAdmin|Admin|Guardia')
 <li class="nav-item">
     <a href="{{ route('visits.index') }}" class="nav-link">
         <i class="fas fa-address-book"></i>
@@ -93,3 +105,4 @@
     </a>
 </li>
 @endhasanyrole
+

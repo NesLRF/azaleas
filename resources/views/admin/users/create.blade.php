@@ -25,13 +25,13 @@
                                                     <i class="fas fa-dollar-sign"></i>
                                                 </span> --}}
                                             </div>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre(s)" required name="name" value="{{old('name')}}">
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre(s)" required name="name" value="{{ old('type') != 'guardia' ? old('name') : ''}}">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label>Apellidos:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" placeholder="Apellidos" required name="last_name" value="{{old('last_name')}}">
+                                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" placeholder="Apellidos" required name="last_name" value="{{ old('type') != 'guardia' ? old('last_name') : ''}}">
                                             {{-- <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fas fa-check"></i></span>
                                             </div> --}}
@@ -45,7 +45,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email" value="{{old('email')}}">
+                                <input type="email" class="form-control @error('email') @if(old('type') != 'guardia') is-invalid @endif @enderror" placeholder="Email" name="email" value="{{old('type') != 'guardia' ? old('email') : ''}}">
                             </div>
                             <label>Contraseña:</label>
                             <div class="input-group mb-3">
@@ -53,7 +53,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Contraseña" name="password">
+                                <input type="password" class="form-control @error('password') @if(old('type') != 'guardia') is-invalid @endif @enderror" placeholder="Contraseña" name="password">
                             </div>
                             <label>Confirmar contraseña:</label>
                             <div class="input-group mb-3">
@@ -61,7 +61,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Confirmar contraseña" name="password_confirmation">
+                                <input type="password" class="form-control @error('password') @if(old('type') != 'guardia') is-invalid @endif @enderror" placeholder="Confirmar contraseña" name="password_confirmation">
                             </div>
                             <div class="form-group">
                                 <div class="row">
@@ -103,6 +103,114 @@
                     </form>
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="card card-danger">
+                    <div class="card-header">
+                        <h3 class="card-title">Guardia</h3>
+                    </div>
+                    <form action="{{ route('users.store') }}" method="POST" id="pay-form">
+                        @csrf
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Nombres:</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                {{-- <span class="input-group-text">
+                                                    <i class="fas fa-dollar-sign"></i>
+                                                </span> --}}
+                                            </div>
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre(s)" required name="name" value="{{ old('type') == 'guardia' ? old('name') : ''}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>Apellidos:</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" placeholder="Apellidos" required name="last_name" value="{{ old('type') == 'guardia' ? old('last_name') : ''}}">
+                                            {{-- <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-check"></i></span>
+                                            </div> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label>Correo:</label>
+                            <div class="input-group mb-3">
+                                
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="email" class="form-control @error('email') @if(old('type')=='guardia') is-invalid @endif @enderror" placeholder="Email" name="email" value="{{ old('type') == 'guardia' ? old('email') : ''}}">
+                            </div>
+                            <label>Contraseña:</label>
+                            <div class="input-group mb-3">
+                                
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="password" class="form-control @error('password') @if(old('type')=='guardia') is-invalid @endif @enderror" placeholder="Contraseña" name="password">
+                            </div>
+                            <label>Confirmar contraseña:</label>
+                            <div class="input-group mb-3">
+                                
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="password" class="form-control @error('password') @if(old('type')=='guardia') is-invalid @endif @enderror" placeholder="Confirmar contraseña" name="password_confirmation">
+                            </div>
+                            <input type="hidden" name="type" value="guardia">
+
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-info" type="submit">Registrar</button>
+                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Todos los usuarios   </h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre: </th>
+                                    <th>Correo: </th>
+                                    <th>Domicilio: </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($users as $item)
+                                    <tr>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->email }}</td>
+                                        <td>
+                                            <p>
+                                            @if(count($item->properties) > 0)
+                                               {{ $item->properties->first()->domicilio.' (Dueño)'}}<br>
+                                            @endif
+                                            @if(count($item->rents) > 0)
+                                                {{$item->rents->first()->domicilio.' (Inquilino)' }}
+                                            @endif
+                                            </p>
+                                            
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        {!! $users->onEachSide(0)->links() !!}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -115,8 +223,61 @@
     <script src="/adminlte/plugins/moment/moment.min.js"></script>
     <script src="/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>
     <script src="/adminlte/plugins/toastr/toastr.min.js"></script>
+    <script src="/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+    {{-- <script src={{asset('adminlte/plugins/datatables/jquery.dataTables.js')}}> </script> --}}
+    <script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/jszip/jszip.min.js"></script>
+    <script src="/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script>
+        $(document).ready(function() {
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "paging": false,
+                "info": false,
+                "ordering": false,
+                // "buttons": [{
+                //         extend: 'copy',
+                //         text: 'Copiar',
+                //         "titleAttr": "Copiar",
+                //         "className": "btn btn-secondary"
+                //     },
+                //     {
+                //         extend: 'csv',
+                //         text: 'csv',
+                //         "titleAttr": "Esportar a CSV",
+                //         "className": "btn btn-info"
+                //     },
+                //     {
+                //         extend: 'excel',
+                //         "titleAttr": "Esportar a Excel",
+                //         "className": "btn btn-success"
+                //     },
+                //     {
+                //         extend: 'print',
+                //         "titleAttr": "Imprimir archivo",
+                //         text: 'PDF',
+                //         "className": "btn btn-danger"
+                //     }
+                // ],
+                "oLanguage": {
+                    "sSearch": "Buscar:",
+                    "sEmptyTable": "No hay informacion que mostrar",
+                    "sInfo": "Mostrando  del _START_ al _END_ de un total de _TOTAL_ registros",
+                },
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+
         var data = {!! $info !!}
         $(function() {
             $('.select2').select2({

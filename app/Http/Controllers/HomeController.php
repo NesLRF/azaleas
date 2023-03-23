@@ -50,7 +50,7 @@ class HomeController extends Controller
                 // $total_users = $total_users->roles->where('name', 'Vecino');
                 $total_users = count($total_users);
             
-            return view('pages.home', compact('months', 'total_neighbors'));
+            return view('admin.home.home', compact('months', 'total_neighbors'));
         }else{
             return view('errors.error400');
         }

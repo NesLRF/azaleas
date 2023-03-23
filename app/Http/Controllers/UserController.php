@@ -40,7 +40,9 @@ class UserController extends Controller
 
             $info = json_encode($info);
 
-            return view('admin.users.create', compact('info'));
+            $users = User::orderBy('created_at','desc')->paginate(10);
+
+            return view('admin.users.create', compact('info','users'));
         }else{
             return view('errors.error400');
         }
@@ -62,7 +64,7 @@ class UserController extends Controller
         ]);
         try{
             $condomino = Direcciones::find($request->condomino_id);
-            
+            $coincidencia = false;
             switch($request->status){
                 case 'tenant':
                     $coincidencia = count($condomino->tenant)>0 ? true : false;
@@ -84,9 +86,14 @@ class UserController extends Controller
     
             $user = new User();
             $user->fill($request->all())->save();
-            $user->$type()->attach($request->condomino_id);
+            if(isset($type)){
+                $user->$type()->attach($request->condomino_id);
 
-            $user->assignRole('Vecino');
+                $user->assignRole('Vecino');
+            }else{
+                $user->assignRole('Guardia');
+            }
+           
     
             return back()->with([
                 "status" => "200",

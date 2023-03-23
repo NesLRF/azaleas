@@ -125,7 +125,7 @@
                         </table>
                     </div>
                     <div class="card-footer d-flex justify-content-end">
-                        {!! $bills->links() !!}
+                        {!! $bills->onEachSide(0)->links() !!}
                     </div>
                 </div>
             </div>

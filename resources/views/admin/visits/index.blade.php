@@ -37,7 +37,7 @@
                         </table>
                     </div>
                     <div class="card-footer d-flex justify-content-end">
-                        {!! $visits->links() !!}
+                        {!! $visits->onEachSide(0)->links() !!}
                     </div>
                 </div>
             </div>

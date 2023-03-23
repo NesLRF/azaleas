@@ -46,6 +46,9 @@ class PaymentsController extends Controller
     {
         if(Auth::user()->can('condomino_create')){
             $condominos = Direcciones::select('id', 'condomino')->get()->toArray();
+            $current_month = Carbon::now()->firstOfMonth()->format('m');
+            $current_year = Carbon::now()->firstOfMonth()->format('Y');
+            
             $index = 0;
             foreach ($condominos as $key => $data) {
                 $info[$index++] = [
@@ -67,7 +70,14 @@ class PaymentsController extends Controller
             $fee = AnnualFees::where('year', $current_year)->first();
             $fee = $fee->cuota;
 
-            return view('pages.payment_register', compact('info', 'current_month', 'last_month'));
+            $current_day = Carbon::now();
+            if($current_day < Carbon::now()->firstOfMonth()->addDays(4)){
+                $fee = $fee - 100;
+            }elseif($current_day > Carbon::now()->firstOfMonth()->addDays(4) && $current_day < Carbon::now()->firstOfMonth()->addDays(9)){
+                $fee = $fee - 50;
+            }
+
+            return view('pages.payment_register', compact('info', 'current_month', 'last_month', 'fee'));
         }else{
             return view('errors.error400');
         }
@@ -125,37 +135,46 @@ class PaymentsController extends Controller
     {
         try {
             if(Auth::user()->can('condomino_create')){
-                Log::info("Pago anual");
-                Log::info($request);
                 $month_selected = '01-'.$request["month_selected"];
                 $month_selected_ff = (new Carbon($month_selected))->format('Y-m-d H:i:s');
                 $capture_month = (new Carbon($month_selected_ff))->format('m');
                 $capture_year = (new Carbon($month_selected_ff))->format('Y');
-                $payment = $request["amount_paid"];
+                $amount_paid = $request["amount_paid"];
                 $description = $request["pay_registered_by"];
                 $condomino = Direcciones::find($request["id_selected"]);
                 $direccion_id = $condomino->id;
                 $check = Monthpayments::where('direccion_id', $direccion_id)->where('capture_month', $capture_month)
                 ->where('capture_year', $capture_year)->get();
+                $current_year = Carbon::now()->format('Y');
+                
 
                 if(count($check) == 0){
                     $payment = Monthpayments::create([
                         "direccion_id" => $direccion_id,
                         "capture_month" => $capture_month,
                         "capture_year" => $capture_year,
-                        "paid" => 300,
+                        "paid" => $amount_paid,
                         "description" => $description
                     ]);
 
-                    for ($i=1; $i < 13; $i++) { 
-                        $capture_month = (new Carbon($month_selected_ff))->addMonths($i)->format('m');
-                        $capture_year = (new Carbon($month_selected_ff))->addMonths($i)->format('Y');
+                    for ($i=1; $i < $request["total_month"]+1; $i++) { 
+                        $capture_month = (new Carbon($month_selected_ff))->addMonths($i)->firstOfMonth();
+                        $capture_m = (new Carbon($capture_month))->format('m');
+                        $capture_y = (new Carbon($capture_month))->format('Y');
+                        $fee = AnnualFees::where('year', $current_year)->first();
+                        $fee = $fee->cuota;
+
+                        if(Carbon::now() < (new Carbon($capture_month))->addDays(4)){
+                            $fee = $fee - 100;
+                        }elseif(Carbon::now() > (new Carbon($capture_month))->addDays(4) && Carbon::now() < (new Carbon($capture_month))->addDays(9)){
+                            $fee = $fee - 50;
+                        }
 
                         $payment = Monthpayments::create([
                             "direccion_id" => $direccion_id,
-                            "capture_month" => $capture_month,
-                            "capture_year" => $capture_year,
-                            "paid" => $i == 12 ? 0 : 300,
+                            "capture_month" => $capture_m,
+                            "capture_year" => $capture_y,
+                            "paid" => $i == 12 ? 0 : $fee,
                             "description" => $i == 12 ? "Bonificación por anualidad" : $description
                         ]);
                     }

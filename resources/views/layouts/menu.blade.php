@@ -98,9 +98,9 @@
 @hasanyrole('SuperAdmin|Admin|Guardia')
 <li class="nav-item">
     <a href="{{ route('visits.index') }}" class="nav-link">
-        <i class="fas fa-user-plus"></i>
+        <i class="fas fa-address-book"></i>
         <p>
-            Visitas
+            Historial de entrada
         </p>
     </a>
 </li>

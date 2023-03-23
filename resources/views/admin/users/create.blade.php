@@ -6,14 +6,73 @@
 
 @section('content')
     <div class="container-fluid">
+        <div class="card-footer">
+            <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#modal-user-neighbor">
+                Agregar usuario
+            </button>
+            <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modal-user-guardia">
+                Agregar guardia
+            </button>
+        </div>
+        <br>
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Usuario</h3>
+                        <h3 class="card-title">Todos los usuarios </h3>
                     </div>
-                    <form action="{{ route('users.store') }}" method="POST" id="pay-form">
-                        @csrf
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombres: </th>
+                                    <th>Apellidos: </th>
+                                    <th>Domicilio: </th>
+                                    <th>Correo: </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($users as $item)
+                                    <tr>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->last_name }}</td>
+                                        <td>
+                                            <p>
+                                                @if (count($item->properties) > 0)
+                                                    {{ $item->properties->first()->domicilio . ' (Dueño)' }}<br>
+                                                @endif
+                                                @if (count($item->rents) > 0)
+                                                    {{ $item->rents->first()->domicilio . ' (Inquilino)' }}
+                                                @endif
+                                            </p>
+
+                                        </td>
+                                        <td>{{ $item->email }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        {!! $users->onEachSide(0)->links() !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- MODAL USERS --}}
+    <div class="modal fade" id="modal-user-neighbor">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('users.store') }}" method="POST" id="pay-form">
+                    @csrf
+                    <div class="modal-header">
+                        <h4 class="modal-title">Crear nuevo usuario</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="row">
@@ -22,46 +81,58 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 {{-- <span class="input-group-text">
-                                                    <i class="fas fa-dollar-sign"></i>
-                                                </span> --}}
+                                                <i class="fas fa-dollar-sign"></i>
+                                            </span> --}}
                                             </div>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre(s)" required name="name" value="{{ old('type') != 'guardia' ? old('name') : ''}}">
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                                placeholder="Nombre(s)" required name="name"
+                                                value="{{ old('type') != 'guardia' ? old('name') : '' }}">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label>Apellidos:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" placeholder="Apellidos" required name="last_name" value="{{ old('type') != 'guardia' ? old('last_name') : ''}}">
+                                            <input type="text"
+                                                class="form-control @error('last_name') is-invalid @enderror"
+                                                placeholder="Apellidos" required name="last_name"
+                                                value="{{ old('type') != 'guardia' ? old('last_name') : '' }}">
                                             {{-- <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fas fa-check"></i></span>
-                                            </div> --}}
+                                            <span class="input-group-text"><i class="fas fa-check"></i></span>
+                                        </div> --}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <label>Correo:</label>
                             <div class="input-group mb-3">
-                                
+
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
-                                <input type="email" class="form-control @error('email') @if(old('type') != 'guardia') is-invalid @endif @enderror" placeholder="Email" name="email" value="{{old('type') != 'guardia' ? old('email') : ''}}">
+                                <input type="email"
+                                    class="form-control @error('email') @if (old('type') != 'guardia') is-invalid @endif @enderror"
+                                    placeholder="Email" name="email"
+                                    value="{{ old('type') != 'guardia' ? old('email') : '' }}">
                             </div>
-                            <label>Contraseña:</label>
-                            <div class="input-group mb-3">
-                                
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <div class="form-group">
+                                <label>Contraseña:</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    </div>
+                                    <input type="password"
+                                        class="form-control @error('password') @if (old('type') != 'guardia') is-invalid @endif @enderror"
+                                        placeholder="Contraseña" name="password">
                                 </div>
-                                <input type="password" class="form-control @error('password') @if(old('type') != 'guardia') is-invalid @endif @enderror" placeholder="Contraseña" name="password">
-                            </div>
-                            <label>Confirmar contraseña:</label>
-                            <div class="input-group mb-3">
-                                
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <label>Confirmar contraseña:</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    </div>
+                                    <input type="password"
+                                        class="form-control @error('password') @if (old('type') != 'guardia') is-invalid @endif @enderror"
+                                        placeholder="Confirmar contraseña" name="password_confirmation">
                                 </div>
-                                <input type="password" class="form-control @error('password') @if(old('type') != 'guardia') is-invalid @endif @enderror" placeholder="Confirmar contraseña" name="password_confirmation">
                             </div>
                             <div class="form-group">
                                 <div class="row">
@@ -76,7 +147,8 @@
                                         <div class="input-group">
                                             <div class="form-check">
                                                 <label>
-                                                    <input class="form-check-input" required type="radio" name="status" value="owner" >
+                                                    <input class="form-check-input" required type="radio" name="status"
+                                                        value="owner">
                                                     <i>Dueño</i>
                                                 </label>
                                             </div>
@@ -84,32 +156,42 @@
                                         <div class="input-group">
                                             <div class="form-check">
                                                 <label>
-                                                    <input class="form-check-input" required type="radio" name="status" value="tenant" >
+                                                    <input class="form-check-input" required type="radio" name="status"
+                                                        value="tenant">
                                                     <i>Inquilino</i>
                                                 </label>
-                                                
                                             </div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-                        <div class="card-footer">
-                            <button class="btn btn-info" type="submit">Registrar</button>
-                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card card-danger">
-                    <div class="card-header">
-                        <h3 class="card-title">Guardia</h3>
                     </div>
-                    <form action="{{ route('users.store') }}" method="POST" id="pay-form">
-                        @csrf
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-info" type="submit">Registrar</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    {{-- END MODAL USERS --}}
+
+    {{-- MODAL GUARDIA --}}
+    <div class="modal fade" id="modal-user-guardia">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('users.store') }}" method="POST" id="pay-form">
+                    @csrf
+                    <div class="modal-header">
+                        <h4 class="modal-title">Crear nuevo Guardia</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="row">
@@ -121,13 +203,18 @@
                                                     <i class="fas fa-dollar-sign"></i>
                                                 </span> --}}
                                             </div>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre(s)" required name="name" value="{{ old('type') == 'guardia' ? old('name') : ''}}">
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                                placeholder="Nombre(s)" required name="name"
+                                                value="{{ old('type') == 'guardia' ? old('name') : '' }}">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <label>Apellidos:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control @error('last_name') is-invalid @enderror" placeholder="Apellidos" required name="last_name" value="{{ old('type') == 'guardia' ? old('last_name') : ''}}">
+                                            <input type="text"
+                                                class="form-control @error('last_name') is-invalid @enderror"
+                                                placeholder="Apellidos" required name="last_name"
+                                                value="{{ old('type') == 'guardia' ? old('last_name') : '' }}">
                                             {{-- <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fas fa-check"></i></span>
                                             </div> --}}
@@ -137,82 +224,49 @@
                             </div>
                             <label>Correo:</label>
                             <div class="input-group mb-3">
-                                
+
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
-                                <input type="email" class="form-control @error('email') @if(old('type')=='guardia') is-invalid @endif @enderror" placeholder="Email" name="email" value="{{ old('type') == 'guardia' ? old('email') : ''}}">
+                                <input type="email"
+                                    class="form-control @error('email') @if (old('type') == 'guardia') is-invalid @endif @enderror"
+                                    placeholder="Email" name="email"
+                                    value="{{ old('type') == 'guardia' ? old('email') : '' }}">
                             </div>
                             <label>Contraseña:</label>
                             <div class="input-group mb-3">
-                                
+
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
-                                <input type="password" class="form-control @error('password') @if(old('type')=='guardia') is-invalid @endif @enderror" placeholder="Contraseña" name="password">
+                                <input type="password"
+                                    class="form-control @error('password') @if (old('type') == 'guardia') is-invalid @endif @enderror"
+                                    placeholder="Contraseña" name="password">
                             </div>
                             <label>Confirmar contraseña:</label>
                             <div class="input-group mb-3">
-                                
+
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
-                                <input type="password" class="form-control @error('password') @if(old('type')=='guardia') is-invalid @endif @enderror" placeholder="Confirmar contraseña" name="password_confirmation">
+                                <input type="password"
+                                    class="form-control @error('password') @if (old('type') == 'guardia') is-invalid @endif @enderror"
+                                    placeholder="Confirmar contraseña" name="password_confirmation">
                             </div>
                             <input type="hidden" name="type" value="guardia">
-
                         </div>
-                        <div class="card-footer">
-                            <button class="btn btn-info" type="submit">Registrar</button>
-                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-info" type="submit">Agregar</button>
+                    </div>
+                </form>
             </div>
+            <!-- /.modal-content -->
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-info">
-                    <div class="card-header">
-                        <h3 class="card-title">Todos los usuarios   </h3>
-                    </div>
-                    <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombre: </th>
-                                    <th>Correo: </th>
-                                    <th>Domicilio: </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($users as $item)
-                                    <tr>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->email }}</td>
-                                        <td>
-                                            <p>
-                                            @if(count($item->properties) > 0)
-                                               {{ $item->properties->first()->domicilio.' (Dueño)'}}<br>
-                                            @endif
-                                            @if(count($item->rents) > 0)
-                                                {{$item->rents->first()->domicilio.' (Inquilino)' }}
-                                            @endif
-                                            </p>
-                                            
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer d-flex justify-content-end">
-                        {!! $users->onEachSide(0)->links() !!}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- /.modal-dialog -->
     </div>
+    {{-- END MODAL GUARDIA --}}
 @endsection
 
 @section('scripts')
@@ -246,30 +300,6 @@
                 "paging": false,
                 "info": false,
                 "ordering": false,
-                // "buttons": [{
-                //         extend: 'copy',
-                //         text: 'Copiar',
-                //         "titleAttr": "Copiar",
-                //         "className": "btn btn-secondary"
-                //     },
-                //     {
-                //         extend: 'csv',
-                //         text: 'csv',
-                //         "titleAttr": "Esportar a CSV",
-                //         "className": "btn btn-info"
-                //     },
-                //     {
-                //         extend: 'excel',
-                //         "titleAttr": "Esportar a Excel",
-                //         "className": "btn btn-success"
-                //     },
-                //     {
-                //         extend: 'print',
-                //         "titleAttr": "Imprimir archivo",
-                //         text: 'PDF',
-                //         "className": "btn btn-danger"
-                //     }
-                // ],
                 "oLanguage": {
                     "sSearch": "Buscar:",
                     "sEmptyTable": "No hay informacion que mostrar",
@@ -287,38 +317,6 @@
 
         })
         $('[data-mask]').inputmask()
-        //validations
-        // $(function() {
-        //     $('#pay-form').validate({
-        //         rules: {
-        //             id_selected: {
-        //                 required: true,
-        //             },
-        //             month_selected: {
-        //                 required: true,
-        //             },
-        //         },
-        //         messages: {
-        //             id_selected: {
-        //                 required: "Seleccione un condomino",
-        //             },
-        //             month_selected: {
-        //                 required: "Seleccione el mes a pagar",
-        //             },
-        //         },
-        //         errorElement: 'span',
-        //         errorPlacement: function(error, element) {
-        //             error.addClass('invalid-feedback');
-        //             element.closest('.form-group').append(error);
-        //         },
-        //         highlight: function(element, errorClass, validClass) {
-        //             $(element).addClass('is-invalid');
-        //         },
-        //         unhighlight: function(element, errorClass, validClass) {
-        //             $(element).removeClass('is-invalid');
-        //         }
-        //     });
-        // });
     </script>
     @if (Session::get('status') == 200)
         <script>
@@ -372,11 +370,20 @@
             color: #444;
             line-height: 18px
         }
-        .card-warning:not(.card-outline)>.card-header, .card-warning:not(.card-outline)>.card-header a {
+
+        .card-warning:not(.card-outline)>.card-header,
+        .card-warning:not(.card-outline)>.card-header a {
             color: #ffffff;
         }
+
         .card-warning:not(.card-outline)>.card-header {
             background-color: #605ca8;
+        }
+
+        .card-footer {
+            padding: 0.75rem 1.25rem;
+            background-color: rgb(0 0 0 / 9%);
+            border-top: 0 solid rgba(0, 0, 0, .125);
         }
     </style>
 @endsection

@@ -174,5 +174,6 @@
     </style>
 @endsection
 
-@section('fonts')
+@section('entries_status')
+    active
 @endsection

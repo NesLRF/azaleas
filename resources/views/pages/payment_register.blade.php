@@ -306,3 +306,7 @@
         }
     </style>
 @endsection
+
+@section('payment_status')
+    active
+@endsection

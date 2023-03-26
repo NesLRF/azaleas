@@ -270,5 +270,6 @@
     </style>
 @endsection
 
-@section('fonts')
+@section('bills_status')
+    active
 @endsection

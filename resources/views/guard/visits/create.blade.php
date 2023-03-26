@@ -143,3 +143,7 @@
         }
     </style>
 @endsection
+
+@section('visits_status')
+    active
+@endsection

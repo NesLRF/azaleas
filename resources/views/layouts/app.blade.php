@@ -38,6 +38,10 @@
             background-color: #ececec4d;
             color: #ececec;
         }
+        .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+            background-color: #cbcbcb57;
+            color: #fff;
+        }
     </style>
     @yield('stilos')
 </head>
@@ -156,7 +160,7 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 @role('Admin|SuperAdmin')
-                                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                                 @endrole
                                 <li class="breadcrumb-item active">@yield('title')</li>
                             </ol>

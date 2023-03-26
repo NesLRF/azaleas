@@ -122,7 +122,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-3">
-                                            <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Cantidad de mantenimientos pagados en el mes de {{$months['current_month']}}">
+                                            <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Cantidad de mantenimientos pagados en el año {{$months['current_month_year']}}">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-center text-muted">Total de pagos realizados en el año {{ $months['current_month_year'] }}</span>
                                                     <span class="info-box-number text-center text-muted mb-0">{{ $annual_payments_fee_count }}</span>
@@ -168,7 +168,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-3">
-                                            <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Bonificaciones aplicadas por pagar en las fechas indicadas en el mes de {{ $months['current_month'] }}">
+                                            <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Bonificaciones aplicadas por pagar en las fechas indicadas en el año {{ $months['current_month_year'] }}">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-center text-muted">Total de bonificaciones del año {{ $months['current_month_year'] }}</span>
                                                     <span class="info-box-number text-center text-muted mb-0">{{ $bonification_annual_payments_count }}</span>

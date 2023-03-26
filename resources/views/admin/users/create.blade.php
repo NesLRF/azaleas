@@ -22,11 +22,23 @@
                         <h3 class="card-title">Todos los usuarios </h3>
                     </div>
                     <div class="card-body">
+                        <form>
+                            
+                            <div class="input-group mb-3 justify-content-end">
+
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input type="search" class="form-control w-25" placeholder="Buscar..." name="search" value="{{ request('search') }}">
+                            </div>
+                            
+                        </form>
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Nombres: </th>
                                     <th>Apellidos: </th>
+                                    <th>Rol: </th>
                                     <th>Domicilio: </th>
                                     <th>Correo: </th>
                                 </tr>
@@ -36,6 +48,7 @@
                                     <tr>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->last_name }}</td>
+                                        <td>{{ $item->roles->first()->name }}</td>
                                         <td>
                                             <p>
                                                 @if (count($item->properties) > 0)
@@ -299,6 +312,7 @@
                 "autoWidth": false,
                 "paging": false,
                 "info": false,
+                "searching": false,
                 "ordering": false,
                 "oLanguage": {
                     "sSearch": "Buscar:",

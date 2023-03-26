@@ -7,10 +7,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Input\Input;
 
 class UserController extends Controller
 {
+
+    public $columns = [
+        'name', 'email', 'last_name'
+
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -40,9 +48,33 @@ class UserController extends Controller
 
             $info = json_encode($info);
 
-            $users = User::orderBy('created_at','desc')->paginate(10);
 
-            return view('admin.users.create', compact('info','users'));
+
+            if (request('search')) {
+                $query = User::query();
+                $search = request('search');
+                $users = $query->when($search, function($query, $search) {
+                    return $query->where(function($query) use ($search) {
+                        foreach($this->columns as $column)
+                        {
+                            foreach(Arr::wrap(explode(' ', $search)) as $word)
+                            {
+                                $query->orWhere($column, 'LIKE', "%{$word}%");
+                            }
+                        }
+                    });
+                })->paginate(10)->setPath ( '' );
+
+                $pagination = $users->appends ( array (
+                    'search' => request('search') 
+                  ) );
+
+            } else {
+                $users = User::orderBy('created_at','desc')->paginate(10)->setPath ( '' );
+            }
+            
+
+            return view('admin.users.create', compact('info','users'))->withQuery( $search ?? '' );
         }else{
             return view('errors.error400');
         }

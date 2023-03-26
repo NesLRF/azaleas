@@ -26,22 +26,6 @@
                 </div>
                 <div class="col-lg-3 col-6">
                     <!-- small card -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>{{ $total_neighbors }}</h3>
-
-                            <p>Vecinos registrados</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <a href="{{ route('users.create') }}" class="small-box-footer">
-                            Ver usuarios <i class="fas fa-arrow-circle-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <!-- small card -->
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <h3>{{$maintenance_not_payment_percent}}<sup style="font-size: 20px">%</sup></h3>
@@ -53,6 +37,22 @@
                         </div>
                         <a href="#" class="small-box-footer">
                             Consultar pendientes <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <!-- small card -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{ $total_neighbors }}</h3>
+
+                            <p>Vecinos registrados</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <a href="{{ route('users.create') }}" class="small-box-footer">
+                            Ver usuarios <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
                 </div>
@@ -90,14 +90,14 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <p class="text-center">
                                         <strong>Datos de Enero - {{ $months['current_month'] }}
                                             {{ $months['current_month_year'] }}</strong>
                                     </p>
                                     <p class="text-success text-center">Cuota actual: <strong>${{ $fee }}</strong></p>
                                     <div class="row">
-                                        <div class="col-12 col-sm-4">
+                                        <div class="col-12 col-sm-3">
                                             <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Ingresos anuales si se realizan los pagos con la cuota acutal">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-center text-muted">Total al año estimado</span>
@@ -105,7 +105,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-4">
+                                        <div class="col-12 col-sm-3">
                                             <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Ingresos mensuales si se realizan los pagos con la cuota acutal">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-center text-muted">Total al mes estimado</span>
@@ -113,7 +113,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-4">
+                                        <div class="col-12 col-sm-3">
                                             <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Cantidad de mantenimientos pagados en el mes de {{$months['current_month']}}">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-center text-muted">Total de pagos realizados en {{ $months['current_month'] }}</span>
@@ -121,7 +121,15 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-4">
+                                        <div class="col-12 col-sm-3">
+                                            <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Cantidad de mantenimientos pagados en el mes de {{$months['current_month']}}">
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text text-center text-muted">Total de pagos realizados en el año {{ $months['current_month_year'] }}</span>
+                                                    <span class="info-box-number text-center text-muted mb-0">{{ $annual_payments_fee_count }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-3">
                                             <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Si se paga entre el día 1 al 5 se bonifican $100. Si se paga entre el día 6 al 10 se bonifican $50.">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-center text-muted">Total al año estimado con bonificación</span>
@@ -136,7 +144,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-4">
+                                        <div class="col-12 col-sm-3">
                                             <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Si se paga entre el día 1 al 5 se bonifican $100. Si se paga entre el día 6 al 10 se bonifican $50.">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-center text-muted">Total al mes estimado con bonificación</span>
@@ -151,11 +159,19 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-4">
+                                        <div class="col-12 col-sm-3">
                                             <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Bonificaciones aplicadas por pagar en las fechas indicadas en el mes de {{ $months['current_month'] }}">
                                                 <div class="info-box-content">
                                                     <span class="info-box-text text-center text-muted">Total de bonificaciones de pago en {{ $months['current_month'] }}</span>
                                                     <span class="info-box-number text-center text-muted mb-0">{{ $bonification_payments_count }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-3">
+                                            <div class="info-box bg-light" data-toggle="tooltip" data-placement="top" title="Bonificaciones aplicadas por pagar en las fechas indicadas en el mes de {{ $months['current_month'] }}">
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text text-center text-muted">Total de bonificaciones del año {{ $months['current_month_year'] }}</span>
+                                                    <span class="info-box-number text-center text-muted mb-0">{{ $bonification_annual_payments_count }}</span>
                                                 </div>
                                             </div>
                                         </div>

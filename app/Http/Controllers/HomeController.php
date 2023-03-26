@@ -74,6 +74,9 @@ class HomeController extends Controller
 
             $annual_payments = Monthpayments::where('capture_year', $current_month_year)->where('paid', '!=', 0)->pluck('paid');
             $month_payments = Monthpayments::where('capture_month', Carbon::now()->startOfMonth()->format('m'))->where('capture_year', $current_month_year)->where('paid', '!=', 0)->pluck('paid');
+            $annual_payments_fee = Monthpayments::where('capture_year', $current_month_year)->where('paid', '!=', 0)->pluck('paid');
+
+            $annual_payments_fee_count = $annual_payments_fee->count();
             $month_payments_count = $month_payments->count();
             $total_current_year = array_sum($annual_payments->toArray());
             $total_current_year_format = number_format($total_current_year, 0, ',');
@@ -109,6 +112,8 @@ class HomeController extends Controller
             $maintenance_not_payment_percent = round($maintenance_not_payment_percent, 1);
 
             $bonification_payments = Monthpayments::where('capture_month', Carbon::now()->startOfMonth()->format('m'))->where('capture_year', $current_month_year)->whereIn('paid', [300, 350]);
+            $bonification_annual_payments = Monthpayments::where('capture_year', $current_month_year)->whereIn('paid', [300, 350]);
+            $bonification_annual_payments_count = $bonification_annual_payments->count();
             $bonification_payments_count = $bonification_payments->count();
 
             return view('admin.home.home', compact(
@@ -133,7 +138,9 @@ class HomeController extends Controller
                 'mensual_bills_format',
                 'annual_bills_format',
                 'annual_bills_percent_format',
-                'mensual_bills_percent_format'
+                'mensual_bills_percent_format',
+                'annual_payments_fee_count',
+                'bonification_annual_payments_count'
             ));
         }else{
             return view('errors.error400');

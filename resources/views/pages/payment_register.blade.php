@@ -90,8 +90,8 @@
                             <div class="form-group">
                                 <div class="callout callout-warning">
                                     <h5><strong>Al Pagar Anualidad!</strong></h5>
-                                    <p>Si se realiza el pago de este mes {{ $current_month }} se bonificará el 13avo
-                                        mes {{ $last_month }}</p>
+                                    <p>Si se realiza el pago anual apartir de este mes <strong>{{ $current_month }}</strong> se bonificará el 13avo
+                                        mes <strong>{{ $last_month }}</strong></p>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">

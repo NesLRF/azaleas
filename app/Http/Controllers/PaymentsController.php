@@ -120,6 +120,11 @@ class PaymentsController extends Controller
                 $direccion_id = $condomino->id;
                 $check = Monthpayments::where('direccion_id', $direccion_id)->where('capture_month', $capture_month)
                 ->where('capture_year', $capture_year)->get();
+                $fee = AnnualFees::where('year', Carbon::now()->format('Y'))->first()->cuota;
+
+                if($capture_month > Carbon::now()->startOfMonth()->format('m')){
+                    $payment = $fee - 100;
+                }
     
                 if(count($check) == 0){
                     $payment = Monthpayments::create([

@@ -180,6 +180,25 @@
                                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                                 </div>
                                 <input type="search" class="form-control w-25" placeholder="Buscar..." name="search" value="{{ request('search') }}">
+                                
+
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>No. de condomino:</label>
+                                        <select class="form-control" data-placeholder="Select a State"
+                                            name="filter_condomino" style="width: 100%;">
+                                            @foreach($condominos as $condomino)
+
+                                                <option value="{{ $condomino->id }}" {{ ($condomino->id == request('filter_condomino')) ? 'selected' : '' }}>
+                                                    {{ $condomino->condomino }}
+                                                </option>
+
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             
                         </form>
@@ -199,7 +218,7 @@
                                     <tr>
                                         <td>{{ $item->direccion->first()->domicilio }}</td>
                                         <td>{{ $item->direccion->first()->condomino }}</td>
-                                        <td>{{ $item->capture_month.' - '.$item->capture_year }}</td>
+                                        <td>{{ $item->capture_month.'-'.$item->capture_year }}</td>
                                         <td>{{ $item->paid}}</td>
                                         <td>{{ $item->description}}</td>
                                         <td>

@@ -12,12 +12,15 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 
 class PaymentsController extends Controller
 {
+
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -59,7 +62,7 @@ class PaymentsController extends Controller
             }
 
             $info = json_encode($info);
-
+            $condominos = Direcciones::select('id','condomino')->get();
             $current_month = Carbon::now()->format('m');
             $current_month = $current_month."-".Carbon::now()->format('Y');
 
@@ -78,29 +81,36 @@ class PaymentsController extends Controller
                 $fee = $fee - 50;
             }
 
-            if (request('search')) {
+            if (request('search') || request('filter_condomino')) {
                 $query = Monthpayments::query();
                 $search = request('search');
+                $condomino = request('filter_condomino');
                 $allPayments = $query->when($search, function($query, $search) {
-                    return $query->whereHas('direccion', function($query) use ($search) {
-                        
+                    return $query->where(function($query) use ($search) {
                         foreach(Arr::wrap(explode(' ', $search)) as $word)
                         {
-                            
-                            $query->Where('domicilio', 'LIKE', "%{$word}%")->orWhere('condomino', 'LIKE', "%{$word}%");
+                            $query->where(DB::raw('CONCAT_WS("-", capture_month, capture_year)'), 'LIKE', "%{$word}%");
                         }
                         
                     });
-                })->paginate(10)->setPath ( '' );
+                })
+                ->when($condomino,function($query,$condomino){
+                    return $query->whereHas('direccion', function($query) use ($condomino){
+                        $query->where('id',$condomino);
+                    });
+                })
+                ->paginate(10)->setPath ( '' );
+
                 $pagination = $allPayments->appends ( array (
-                    'search' => request('search') 
+                    'search' => request('search'),
+                    'filter_condomino' => request('filter_condomino') 
                   ) );
 
             } else {
                 $allPayments = Monthpayments::paginate(10)->setPath ( '' );
             }
 
-            return view('pages.payment_register', compact('info', 'current_month', 'last_month', 'fee', 'allPayments'))->withQuery( $search ?? '' );
+            return view('pages.payment_register', compact('info', 'condominos', 'current_month', 'last_month', 'fee', 'allPayments'))->withQuery( $search ?? '' );
         }else{
             return view('errors.error400');
         }
@@ -120,11 +130,6 @@ class PaymentsController extends Controller
                 $direccion_id = $condomino->id;
                 $check = Monthpayments::where('direccion_id', $direccion_id)->where('capture_month', $capture_month)
                 ->where('capture_year', $capture_year)->get();
-                $fee = AnnualFees::where('year', Carbon::now()->format('Y'))->first()->cuota;
-
-                if($capture_month > Carbon::now()->startOfMonth()->format('m')){
-                    $payment = $fee - 100;
-                }
     
                 if(count($check) == 0){
                     $payment = Monthpayments::create([

@@ -19,6 +19,6 @@ class Monthpayments extends Model
 
     public function direccion()
     {
-        return $this->hasMany(Direcciones::class);
+        return $this->hasMany(Direcciones::class,'id','direccion_id');
     }
 }

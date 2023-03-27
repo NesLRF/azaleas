@@ -10,6 +10,7 @@ use App\Models\Monthpayments;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -77,7 +78,29 @@ class PaymentsController extends Controller
                 $fee = $fee - 50;
             }
 
-            return view('pages.payment_register', compact('info', 'current_month', 'last_month', 'fee'));
+            if (request('search')) {
+                $query = Monthpayments::query();
+                $search = request('search');
+                $allPayments = $query->when($search, function($query, $search) {
+                    return $query->whereHas('direccion', function($query) use ($search) {
+                        
+                        foreach(Arr::wrap(explode(' ', $search)) as $word)
+                        {
+                            
+                            $query->Where('domicilio', 'LIKE', "%{$word}%")->orWhere('condomino', 'LIKE', "%{$word}%");
+                        }
+                        
+                    });
+                })->paginate(10)->setPath ( '' );
+                $pagination = $allPayments->appends ( array (
+                    'search' => request('search') 
+                  ) );
+
+            } else {
+                $allPayments = Monthpayments::paginate(10)->setPath ( '' );
+            }
+
+            return view('pages.payment_register', compact('info', 'current_month', 'last_month', 'fee', 'allPayments'))->withQuery( $search ?? '' );
         }else{
             return view('errors.error400');
         }

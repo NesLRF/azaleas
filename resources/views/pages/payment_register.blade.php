@@ -165,6 +165,59 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Todos los pagos </h3>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            
+                            <div class="input-group mb-3 justify-content-end">
+
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                </div>
+                                <input type="search" class="form-control w-25" placeholder="Buscar..." name="search" value="{{ request('search') }}">
+                            </div>
+                            
+                        </form>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Direccion </th>
+                                    <th>Condomino </th>
+                                    <th>Fecha pagada </th>
+                                    <th>Pago </th>
+                                    <th>Descripcion </th>
+                                    <th>Acciones </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($allPayments as $item)
+                                    <tr>
+                                        <td>{{ $item->direccion->first()->domicilio }}</td>
+                                        <td>{{ $item->direccion->first()->condomino }}</td>
+                                        <td>{{ $item->capture_month.' - '.$item->capture_year }}</td>
+                                        <td>{{ $item->paid}}</td>
+                                        <td>{{ $item->description}}</td>
+                                        <td>
+                                            <button class="btn btn-info" >
+                                                <i class="fas fa-envelope"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        {!! $allPayments->onEachSide(0)->links() !!}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -175,8 +228,39 @@
     <script src="/adminlte/plugins/moment/moment.min.js"></script>
     <script src="/adminlte/plugins/inputmask/jquery.inputmask.min.js"></script>
     <script src="/adminlte/plugins/toastr/toastr.min.js"></script>
+    <script src="/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+    {{-- <script src={{asset('adminlte/plugins/datatables/jquery.dataTables.js')}}> </script> --}}
+    <script src="/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/adminlte/plugins/jszip/jszip.min.js"></script>
+    <script src="/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script>
+
+        $(document).ready(function() {
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "paging": false,
+                "info": false,
+                "searching": false,
+                "ordering": false,
+                "oLanguage": {
+                    "sSearch": "Buscar:",
+                    "sEmptyTable": "No hay informacion que mostrar",
+                    "sInfo": "Mostrando  del _START_ al _END_ de un total de _TOTAL_ registros",
+                },
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+
         var data = {!! $info !!}
         $(function() {
             $('.select2').select2({

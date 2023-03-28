@@ -20,6 +20,20 @@ use Maatwebsite\Excel\Facades\Excel;
 class PaymentsController extends Controller
 {
 
+    public $months = [
+        1 => 'Enero',
+        2 => 'Febrero',
+        3 => 'Marzo',
+        4 => 'Abril',
+        5 => 'Mayo',
+        6 => 'Junio',
+        7 => 'Julio',
+        8 => 'Agosto',
+        9 => 'Septiembre',
+        10 => 'Octubre',
+        11 => 'Noviembre',
+        12 => 'Diciembre'
+    ];
 
     public function __construct()
     {
@@ -81,36 +95,35 @@ class PaymentsController extends Controller
                 $fee = $fee - 50;
             }
 
-            if (request('search') || request('filter_condomino')) {
-                $query = Monthpayments::query();
-                $search = request('search');
+            $query = Monthpayments::query();
+            if (request('filter_condomino')) {
                 $condomino = request('filter_condomino');
-                $allPayments = $query->when($search, function($query, $search) {
-                    return $query->where(function($query) use ($search) {
-                        foreach(Arr::wrap(explode(' ', $search)) as $word)
-                        {
-                            $query->where(DB::raw('CONCAT_WS("-", capture_month, capture_year)'), 'LIKE', "%{$word}%");
-                        }
-                        
-                    });
-                })
-                ->when($condomino,function($query,$condomino){
-                    return $query->whereHas('direccion', function($query) use ($condomino){
-                        $query->where('id',$condomino);
-                    });
-                })
-                ->paginate(10)->setPath ( '' );
-
-                $pagination = $allPayments->appends ( array (
-                    'search' => request('search'),
-                    'filter_condomino' => request('filter_condomino') 
-                  ) );
-
-            } else {
-                $allPayments = Monthpayments::paginate(10)->setPath ( '' );
+                $query->whereHas('direccion', function($query) use ($condomino){
+                    $query->where('id',$condomino);
+                });
             }
 
-            return view('pages.payment_register', compact('info', 'condominos', 'current_month', 'last_month', 'fee', 'allPayments'))->withQuery( $search ?? '' );
+            if(request('filter_month')){
+                $query->where('capture_month',request('filter_month'));
+            }
+
+            if(request('filter_year')){
+                $query->where('capture_year',request('filter_year'));
+            }
+
+            $allPayments = $query->paginate(10)->setPath ( '' );
+
+            $pagination = $allPayments->appends ( array (
+                'search' => request('search'),
+                'filter_condomino' => request('filter_condomino'),
+                'filter_month' => request('filter_month'),
+                'filter_year' => request('filter_year') 
+              ) );
+
+            $years = Monthpayments::get()->pluck('capture_year')->unique()->toArray();
+            $months = $this->months;
+
+            return view('pages.payment_register', compact('info', 'months', 'years', 'condominos', 'current_month', 'last_month', 'fee', 'allPayments'))->withQuery( $search ?? '' );
         }else{
             return view('errors.error400');
         }

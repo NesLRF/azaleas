@@ -174,7 +174,7 @@
                     <div class="card-body">
                         <form>
                             
-                            <div class="input-group mb-3 justify-content-end">
+                            {{-- <div class="input-group mb-3 justify-content-end">
 
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-search"></i></span>
@@ -182,13 +182,16 @@
                                 <input type="search" class="form-control w-25" placeholder="Buscar..." name="search" value="{{ request('search') }}">
                                 
 
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col">
                                         <label>No. de condomino:</label>
-                                        <select class="form-control" data-placeholder="Select a State"
+                                        <select class="form-control select_2" data-placeholder="Seleccionar condomino"
                                             name="filter_condomino" style="width: 100%;">
+                                            <option value="" {{ ("" == request('filter_condomino')) ? 'selected' : '' }}>
+                                                Seleccionar condomino
+                                            </option>
                                             @foreach($condominos as $condomino)
 
                                                 <option value="{{ $condomino->id }}" {{ ($condomino->id == request('filter_condomino')) ? 'selected' : '' }}>
@@ -198,6 +201,50 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="col">
+                                        <label>Año:</label>
+                                        <select class="form-control select_2" data-placeholder="Seleccionar año"
+                                            name="filter_year" style="width: 100%;">
+                                            <option value="" {{ ("" == request('filter_year')) ? 'selected' : '' }}>
+                                                Seleccionar año
+                                            </option>
+                                            @foreach($years as $year)
+
+                                                <option value="{{ $year }}" {{ ($year == request('filter_year')) ? 'selected' : '' }}>
+                                                    {{ $year }}
+                                                </option>
+
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label>Mes:</label>
+                                        <select class="form-control select_2" data-placeholder="Seleccionar mes"
+                                            name="filter_month" style="width: 100%;">
+                                            <option value="" {{ ("" == request('filter_month')) ? 'selected' : '' }}>
+                                                Seleccionar mes
+                                            </option>
+                                            @foreach($months as $key => $month)
+
+                                                <option value="{{ $key }}" {{ ($key == request('filter_month')) ? 'selected' : '' }}>
+                                                    {{ $month }}
+                                                </option>
+
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-warning">Filtrar</button>
+                                            @if(request('filter_condomino') || request('filter_year') || request('filter_month'))
+                                            <a href="{{route('pay_view')}}"> <button type="button" class="btn btn-danger">Eliminar filtros</button> </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                    
                                 </div>
                             </div>
                             
@@ -286,6 +333,8 @@
                 data: data,
 
             });
+
+            $('.select_2').select2();
 
             $('.month_select').select2({
                 data: [{

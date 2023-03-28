@@ -111,14 +111,14 @@ class PaymentsController extends Controller
                 $query->where('capture_year',request('filter_year'));
             }
 
-            $allPayments = $query->paginate(10)->setPath ( '' );
+            $allPayments = $query->orderBy('created_at', 'desc')->paginate(10)->setPath ( '' );
 
             $pagination = $allPayments->appends ( array (
                 'search' => request('search'),
                 'filter_condomino' => request('filter_condomino'),
                 'filter_month' => request('filter_month'),
                 'filter_year' => request('filter_year') 
-              ) );
+            ));
 
             $years = Monthpayments::get()->pluck('capture_year')->unique()->toArray();
             $months = $this->months;

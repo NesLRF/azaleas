@@ -6,165 +6,15 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card card-info">
-                    <div class="card-header">
-                        <h3 class="card-title">Pago de mantenimiento mensual</h3>
-                    </div>
-                    <form action="{{ route('send_payment_data') }}" method="POST" id="pay-form">
-                        @csrf
-                        <div class="card-body">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label>No. de condomino:</label>
-                                        <select class="form-control select2" data-placeholder="Select a State"
-                                            name="id_selected" style="width: 100%;">
-                                        </select>
-                                    </div>
-                                    <div class="col-6">
-                                        <label>Mes a pagar:</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" data-inputmask-alias="datetime"
-                                                data-inputmask-inputformat="mm-yyyy" data-mask name="month_selected"
-                                                required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label>Cantidad de:</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-dollar-sign"></i>
-                                                </span>
-                                            </div>
-                                            <input type="number" class="form-control" required name="amount_paid"
-                                                value="{{$fee}}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <label>Descripción:</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" required name="pay_registered_by">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fas fa-check"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <h4>Enviar recibo</h4>
-
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                </div>
-                                <input type="email" class="form-control" placeholder="Email" name="send_email">
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-info" type="submit">Registrar</button>
-                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-warning">
-                    <div class="card-header">
-                        <h3 class="card-title">Multi pago</h3>
-                    </div>
-                    <form action="{{ route('send_annual_payment_data') }}" method="POST" id="pay-form">
-                        @csrf
-                        <div class="card-body">
-                            <div class="form-group">
-                                <div class="callout callout-warning">
-                                    <h5><strong>Al Pagar Anualidad!</strong></h5>
-                                    <p>Si se realiza el pago anual apartir de este mes <strong>{{ $current_month }}</strong> se bonificará el 13avo
-                                        mes <strong>{{ $last_month }}</strong></p>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label>Meses a Pagar:</label>
-                                        <select class="form-control month_select" data-placeholder="Select a State"
-                                            name="total_month" style="width: 100%;">
-                                        </select>
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label>No. de condomino:</label>
-                                        <select class="form-control select2" data-placeholder="Select a State"
-                                            name="id_selected" style="width: 100%;">
-                                        </select>
-                                    </div>
-                                    <div class="col-6">
-                                        <label>A partir del mes:</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                            </div>
-                                            <input type="text" class="form-control" data-inputmask-alias="datetime"
-                                                data-inputmask-inputformat="mm-yyyy" data-mask name="month_selected"
-                                                required>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label>Cantidad de:</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fas fa-dollar-sign"></i>
-                                                </span>
-                                            </div>
-                                            <input type="number" class="form-control" required name="amount_paid"
-                                                value="{{ $fee }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <label>Descripción:</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" required name="pay_registered_by">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fas fa-check"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <h4>Enviar recibo</h4>
-
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                </div>
-                                <input type="email" class="form-control" placeholder="Email" name="send_email">
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-warning" type="submit">Registrar</button>
-                            <button type="reset" class="btn btn-outline-danger float-right">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#modal-user-neighbor">
+                Registrar pago
+            </button>
+            <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#modal-user-guardia">
+                Multi Pago
+            </button>
         </div>
+        <br>
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-success">
@@ -173,16 +23,6 @@
                     </div>
                     <div class="card-body">
                         <form>
-                            
-                            {{-- <div class="input-group mb-3 justify-content-end">
-
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                </div>
-                                <input type="search" class="form-control w-25" placeholder="Buscar..." name="search" value="{{ request('search') }}">
-                                
-
-                            </div> --}}
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col">
@@ -257,7 +97,7 @@
                                     <th>Fecha pagada </th>
                                     <th>Pago </th>
                                     <th>Descripcion </th>
-                                    <th>Acciones </th>
+                                    <th class="text-center">Acciones </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -268,7 +108,7 @@
                                         <td>{{ $item->capture_month.'-'.$item->capture_year }}</td>
                                         <td>{{ $item->paid}}</td>
                                         <td>{{ $item->description}}</td>
-                                        <td>
+                                        <td class="text-center">
                                             <button class="btn btn-info" >
                                                 <i class="fas fa-envelope"></i>
                                             </button>
@@ -285,6 +125,182 @@
             </div>
         </div>
     </div>
+    {{-- MODAL PAGO MES --}}
+    <div class="modal fade" id="modal-user-neighbor">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('send_payment_data') }}" method="POST" id="pay-form">
+                    @csrf
+                    <div class="modal-header bg-success">
+                        <h4 class="modal-title">Crear nuevo Guardia</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>No. de condomino:</label>
+                                    <select class="form-control select2" data-placeholder="Select a State"
+                                        name="id_selected" style="width: 100%;">
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label>Mes a pagar:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" data-inputmask-alias="datetime"
+                                            data-inputmask-inputformat="mm-yyyy" data-mask name="month_selected"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Cantidad de:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-dollar-sign"></i>
+                                            </span>
+                                        </div>
+                                        <input type="number" class="form-control" required name="amount_paid"
+                                            value="{{$fee}}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label>Descripción:</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" required name="pay_registered_by">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fas fa-check"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>Enviar recibo</h4>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="email" class="form-control" placeholder="Email" name="send_email">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="reset" class="btn btn-outline-danger float-right" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-success" type="submit">Registrar</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    {{-- END MODAL PAGO MES --}}
+
+    {{-- MODAL MULTI PAGO --}}
+    <div class="modal fade" id="modal-user-guardia">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('send_annual_payment_data') }}" method="POST" id="pay-form">
+                    @csrf
+                    <div class="modal-header bg-warning">
+                        <h4 class="modal-title">Crear nuevo Guardia</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="callout callout-warning">
+                                <h5><strong>Al Pagar Anualidad!</strong></h5>
+                                <p>Si se realiza el pago anual apartir de este mes <strong>{{ $current_month }}</strong> se bonificará el 13avo
+                                    mes <strong>{{ $last_month }}</strong></p>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Meses a Pagar:</label>
+                                    <select class="form-control month_select" data-placeholder="Select a State"
+                                        name="total_month" style="width: 100%;">
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>No. de condomino:</label>
+                                    <select class="form-control select2" data-placeholder="Select a State"
+                                        name="id_selected" style="width: 100%;">
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label>A partir del mes:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" data-inputmask-alias="datetime"
+                                            data-inputmask-inputformat="mm-yyyy" data-mask name="month_selected"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Cantidad de:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-dollar-sign"></i>
+                                            </span>
+                                        </div>
+                                        <input type="number" class="form-control" required name="amount_paid"
+                                            value="{{ $fee }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label>Descripción:</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" required name="pay_registered_by">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fas fa-check"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>Enviar recibo</h4>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input type="email" class="form-control" placeholder="Email" name="send_email">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-warning" type="submit">Registrar</button>
+                        <button type="reset" class="btn btn-outline-danger float-right" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    {{-- END MODAL MULTI PAGO --}}
 @endsection
 
 @section('scripts')
@@ -445,16 +461,23 @@
             color: #ffffff;
         }
 
-        .card-warning:not(.card-outline)>.card-header {
-            background-color: #605ca8;
+        .bg-warning {
+            background-color: #605ca8!important;
         }
 
+        .bg-warning, .bg-warning>a {
+            color: #ffffff!important;
+        }
 
         .btn-warning {
             color: #f8f9fa;
             background-color: #605ca8;
             border-color: #605ca8;
             box-shadow: none;
+        }
+        .btn-outline-warning {
+            color: #6f42c1;
+            border-color: #6f42c1;
         }
     </style>
 @endsection
